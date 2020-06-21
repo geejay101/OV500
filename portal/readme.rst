@@ -20,6 +20,7 @@ guide change log <https://github.com/openvoips/OV500/edit/master/changelog.rst>`
 -- version-1.0.1--
 
 Bundle & bundle billing
+
 Cron Services
 
 *******************
@@ -47,8 +48,11 @@ Resources
 *********
 
 CodeIgniter
+
 MariaDB
+
 Freeswitch
+
 kamalio
 
 ***************
