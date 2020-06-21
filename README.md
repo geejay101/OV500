@@ -20,7 +20,8 @@ Features list are as below...
 - Multi level Reseller account Management
 - DID billing
 - Smart and dynamic routing
-- Tariff / Bundle Traiff (Package) Management 
+- Tariff Management
+- Bundle Management  
 - Integrated online payment process option
 - Monitoring & Repoting 
 
