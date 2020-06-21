@@ -136,9 +136,6 @@
                     $menu_user .= '<li ' . $class . '><a href="' . base_url() . 'bundle">Bundle & Package</a></li>';
                 }
                 
-                
-                
-
                 if ($menu_user != '') {
                     echo '<li><a><i class="fa fa-registered"></i>Rates & Package<span class="fa fa-chevron-down"></span></a> <ul class="nav child_menu">';
                     echo $menu_user;
