@@ -1362,7 +1362,7 @@ INSERT INTO `sys_countries` VALUES ('49', 'COD', 'CD', '243', 'Democratic Republ
 INSERT INTO `sys_countries` VALUES ('50', 'COG', 'CG', '242', 'Republic of the Congo', '1', '0');
 INSERT INTO `sys_countries` VALUES ('51', 'COK', 'CK', '682', 'Cook Islands', '1', '0');
 INSERT INTO `sys_countries` VALUES ('52', 'CRI', 'CR', '506', 'Costa Rica', '1', '0');
-INSERT INTO `sys_countries` VALUES ('53', 'CIV', 'CI', '225', 'Cote D\'ivoire', '1', '0');
+INSERT INTO `sys_countries` VALUES ('53', 'CIV', 'CI', '225', 'Cote Divoire', '1', '0');
 INSERT INTO `sys_countries` VALUES ('54', 'HRV', 'HR', '385', 'Croatia', '1', '0');
 INSERT INTO `sys_countries` VALUES ('55', 'CUB', 'CU', '53', 'Cuba', '1', '0');
 INSERT INTO `sys_countries` VALUES ('56', 'CYP', 'CY', '357', 'Cyprus', '1', '0');
@@ -1968,3 +1968,97 @@ ALTER TABLE `sys_invoice_config` ADD UNIQUE(`account_id`);
 -- Records of web_access
 -- ----------------------------
 INSERT INTO `web_access` VALUES ('1', 'admin', '123456', '1', '2019-05-03 20:30:42', '2019-06-28 04:22:00');
+
+
+
+
+CREATE TABLE `bundle_account` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `bundle_package_id` varchar(30) DEFAULT NULL,
+  `account_id` varchar(30) DEFAULT NULL,
+  `assign_dt` date DEFAULT NULL,
+  `account_bundle_key` varchar(30) DEFAULT NULL,
+  `bundle_package_desc` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `account_bundle_key` (`account_bundle_key`)
+) ENGINE=InnoDB AUTO_INCREMENT=1;
+
+
+
+CREATE TABLE `bundle_package` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `bundle_package_id` varchar(30) DEFAULT '',
+  `bundle_package_name` varchar(30) DEFAULT '',
+  `bundle_package_currency_id` int(11) DEFAULT 1,
+  `bundle_package_status` enum('1','0') DEFAULT '1',
+  `bundle_package_description` varchar(50) DEFAULT '',
+  `created_by` varchar(30) NOT NULL,
+  `create_dt` datetime DEFAULT NULL,
+  `update_dt` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  `package_option` enum('1','0') DEFAULT '0',
+  `monthly_charges` double DEFAULT 0,
+  `bundle_option` enum('1','0') DEFAULT '0',
+  `bundle1_type` enum('MINUTE','COST') DEFAULT 'MINUTE',
+  `bundle1_value` double(12,6) DEFAULT NULL,
+  `bundle2_type` enum('MINUTE','COST') DEFAULT 'MINUTE',
+  `bundle2_value` double(12,6) DEFAULT NULL,
+  `bundle3_type` enum('MINUTE','COST') DEFAULT 'MINUTE',
+  `bundle3_value` double(12,6) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `bundle_package_id` (`bundle_package_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+
+CREATE TABLE `bundle_package_prefixes` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `bundle_package_id` varchar(30) NOT NULL,
+  `bundle_id` enum('1','2','3') NOT NULL DEFAULT '1',
+  `prefix` varchar(30) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `bundle_package_id` (`bundle_package_id`,`bundle_id`,`prefix`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=1 ;
+
+
+ALTER TABLE `customer_bundle_sdr` DROP INDEX `usersdr_id`;
+ALTER TABLE `customer_bundle_sdr` ADD COLUMN `account_bundle_key`  varchar(50)   DEFAULT '' AFTER `account_id`;
+ALTER TABLE `customer_bundle_sdr` ADD COLUMN `bundle_package_id`  varchar(30)   DEFAULT '' AFTER `account_bundle_key`;
+ALTER TABLE `customer_bundle_sdr` ADD COLUMN `bundle_package_name`  varchar(150)  NULL DEFAULT '' AFTER `yearmonth`;
+ALTER TABLE `customer_bundle_sdr` ADD COLUMN `total_allowed`  double(18,6)  DEFAULT 0.000000 AFTER `bundle_package_name`;
+ALTER TABLE `customer_bundle_sdr` ADD COLUMN `bundle_type`  varchar(300)   DEFAULT '' AFTER `total_allowed`;
+ALTER TABLE `customer_bundle_sdr` DROP COLUMN `service_number`;
+ALTER TABLE `customer_bundle_sdr` DROP COLUMN `service_charges`;
+ALTER TABLE `customer_bundle_sdr` DROP COLUMN `tax1`;
+ALTER TABLE `customer_bundle_sdr` DROP COLUMN `tax1_cost`;
+ALTER TABLE `customer_bundle_sdr` DROP COLUMN `tax2`;
+ALTER TABLE `customer_bundle_sdr` DROP COLUMN `tax2_cost`;
+ALTER TABLE `customer_bundle_sdr` DROP COLUMN `tax3`;
+ALTER TABLE `customer_bundle_sdr` DROP COLUMN `tax3_cost`;
+ALTER TABLE `customer_bundle_sdr` DROP COLUMN `total_tax`;
+ALTER TABLE `customer_bundle_sdr` DROP COLUMN `cost`;
+ALTER TABLE `customer_bundle_sdr` DROP COLUMN `total_cost`;
+ALTER TABLE `customer_bundle_sdr` DROP COLUMN `detail`;
+ALTER TABLE `customer_bundle_sdr` DROP COLUMN `otherdata`;
+
+CREATE INDEX `package_id` ON `customer_bundle_sdr`(`account_id`, `rule_type`, `yearmonth`, `account_bundle_key`, `bundle_package_id`) USING BTREE ;
+CREATE UNIQUE INDEX `term` ON `sys_sdr_terms`(`term`) USING BTREE ;
+
+INSERT INTO `sys_sdr_terms` (`term_group`, `term`, `display_text`, `cost_calculation_formula`) VALUES ('usage', 'BUNDLECHARGES', 'Bundle & Package Charges', '-');
+/*
+ALTER TABLE `tariff` DROP COLUMN `package_option`;
+ALTER TABLE `tariff` DROP COLUMN `monthly_charges`;
+ALTER TABLE `tariff` DROP COLUMN `bundle_option`;
+ALTER TABLE `tariff` DROP COLUMN `bundle1_type`;
+ALTER TABLE `tariff` DROP COLUMN `bundle1_value`;
+ALTER TABLE `tariff` DROP COLUMN `bundle2_type`;
+ALTER TABLE `tariff` DROP COLUMN `bundle2_value`;
+ALTER TABLE `tariff` DROP COLUMN `bundle3_type`;
+ALTER TABLE `tariff` DROP COLUMN `bundle3_value`;
+ALTER TABLE `tariff` ROW_FORMAT=Compact;
+
+DROP TABLE `tariff_bundle_prefixes`;
+*/
+
+
+ALTER TABLE `did_dst`
+MODIFY COLUMN `dst_type`  enum('IP','CUSTOMER','PSTN') DEFAULT 'IP' AFTER `account_id`,
+MODIFY COLUMN `dst_type2`  enum('IP','CUSTOMER','PSTN')  DEFAULT 'IP' AFTER `update_date`;
+
