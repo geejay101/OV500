@@ -133,14 +133,14 @@
                     $class = '';
                     if (in_array($page_name, array('bundle_index', 'bundle_add', 'bundle_edit')))
                         $class = 'class="current-page"';
-                    $menu_user .= '<li ' . $class . '><a href="' . base_url() . 'bundle">Bundle & Pachage</a></li>';
+                    $menu_user .= '<li ' . $class . '><a href="' . base_url() . 'bundle">Bundle & Package</a></li>';
                 }
                 
                 
                 
 
                 if ($menu_user != '') {
-                    echo '<li><a><i class="fa fa-registered"></i>Rates & Pachage<span class="fa fa-chevron-down"></span></a> <ul class="nav child_menu">';
+                    echo '<li><a><i class="fa fa-registered"></i>Rates & Package<span class="fa fa-chevron-down"></span></a> <ul class="nav child_menu">';
                     echo $menu_user;
                     echo '</ul></li>';
                 }
