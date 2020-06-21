@@ -53,7 +53,7 @@ MariaDB
 
 Freeswitch
 
-kamalio
+kamailio
 
 ***************
 Acknowledgement
