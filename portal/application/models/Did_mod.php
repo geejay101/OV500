@@ -3,11 +3,11 @@
 // ##############################################################################
 // OV500 - Open Source SIP Switch & Pre-Paid & Post-Paid VoIP Billing Solution
 //
-// Copyright (C) 2019 Chinna Technologies
+// Copyright (C) 2019-2020 Chinna Technologies 
 // Seema Anand <openvoips@gmail.com>
 // Anand <kanand81@gmail.com>
 // http://www.openvoips.com  http://www.openvoips.org
-// OV500 Version 1.0
+// OV500 Version 1.0.1
 // License https://www.gnu.org/licenses/agpl-3.0.html
 //
 // This program is free software: you can redistribute it and/or modify
@@ -814,23 +814,10 @@ INNER JOIN tariff_ratecard_map on tariff_ratecard_map.tariff_id = carrier.tariff
     function assignment($did, $setup, $rental) {
 
         try {
+            $this->db->trans_begin();
             $account_type = get_logged_account_type();
             $account_id = get_logged_account_id();
             $account_level = get_logged_account_level();
-            ///////////api/////////
-            $api_request['request'] = 'NEWDIDSETUP';
-            $api_request['account_id'] = $account_id;
-            $api_request['service_number'] = $did;
-            $api_request['account_type'] = $account_type;
-            $api_request['account_level'] = $account_level;
-
-            //$request['channels'] = '15';
-            $api_response = callSdrAPI($api_request);
-            $api_result = json_decode($api_response, true);
-            if (!isset($api_result['status']) || $api_result['status'] != 'SUCCESS') {
-                throw new Exception('SDR Problem:' . $api_result['message']);
-            }
-            $this->db->trans_begin();
             if ($account_type == 'CUSTOMER') {
                 $sql = "update did set did_status = 'USED', account_id = '" . $account_id . "', assign_date = now() WHERE did_number = '" . $did . "'";
             } else {
@@ -851,10 +838,28 @@ INNER JOIN tariff_ratecard_map on tariff_ratecard_map.tariff_id = carrier.tariff
                 $this->db->trans_rollback();
                 throw new Exception($error_array['message']);
             } else {
+                ///////////api/////////		
+                $api_request['request'] = 'NEWDIDSETUP';
+                $api_request['account_id'] = $account_id;
+                $api_request['service_number'] = $did;
+                $api_request['account_type'] = $account_type;
+                $api_request['account_level'] = $account_level;
+
+
+                //$request['channels'] = '15';			
+                $api_response = callSdrAPI($api_request);
+                $api_result = json_decode($api_response, true);
+                if (!isset($api_result['error']) || $api_result['error'] == '1') {
+                    $this->db->trans_rollback();
+                    throw new Exception('SDR Problem:' . $api_result['message']);
+                }
+                //////////api/////////
+
                 $this->db->trans_commit();
+                return true;
             }
-            return true;
         } catch (Exception $e) {
+            $this->db->trans_rollback();
             return $e->getMessage();
         }
     }
@@ -992,19 +997,21 @@ INNER JOIN tariff_ratecard_map on tariff_ratecard_map.tariff_id = carrier.tariff
                 $this->db->trans_rollback();
                 return $error_array['message'];
             } else {
+            $api_request['request'] = 'DIDCANCEL';
+            $api_request['account_id'] = $account_id;
+            $api_request['service_number'] = $did_row['did_number'];
+            $api_request['account_type'] = $user_row['account_type'];
+            $api_request['account_level'] = $user_row['account_level'];
+            $api_response = callSdrAPI($api_request);
+            $api_result = json_decode($api_response, true);    
+            
+         
+            if (!isset($api_result['error']) || $api_result['error'] == '1') {
+                  $this->db->trans_rollback();
+                throw new Exception('SDR Problem:' . $api_result['message']);
+            }
                 $this->db->trans_commit();
-                $api_request['request'] = 'DIDCANCEL';
-                $api_request['account_id'] = $account_id;
-                $api_request['service_number'] = $did_row['did_number'];
-                $api_request['account_type'] = $user_row['account_type'];
-                $api_request['account_level'] = $user_row['account_level'];
-                $api_response = callSdrAPI($api_request);
-                $api_result = json_decode($api_response, true);
-                if (!isset($api_result['error']) || $api_result['error'] == '1') {
-                    throw new Exception('SDR Problem:' . $api_result['message']);
-                }
-
-                return true;
+            return true;
             }
         } catch (Exception $e) {
             $this->db->trans_rollback();

@@ -3,13 +3,13 @@
 // ##############################################################################
 // OV500 - Open Source SIP Switch & Pre-Paid & Post-Paid VoIP Billing Solution
 //
-// Copyright (C) 2019 Chinna Technologies  
+// Copyright (C) 2019-2020 Chinna Technologies   
 // Seema Anand <openvoips@gmail.com>
 // Anand <kanand81@gmail.com>
 // http://www.openvoips.com  http://www.openvoips.org
 //
 //
-// OV500 Version 1.0
+// OV500 Version 1.0.1
 // License https://www.gnu.org/licenses/agpl-3.0.html
 //
 // This program is free software: you can redistribute it and/or modify
@@ -598,6 +598,22 @@ class Customers extends CI_Controller {
                     }
                     redirect(current_url(), 'location', '301');
                     break;
+                case 'account_bundle_delete':
+                    $delete_id_array = json_decode($_POST['delete_id']);
+                    // $logged_account_type = get_logged_account_type();
+                    // $logged_account_id = get_logged_account_id();
+                    $delete_param_array = array('delete_id' => $delete_id_array);
+                    $result = $this->customer_mod->delete_bundle($account_id, $delete_param_array);
+                    if ($result === true) {
+                        $suc_msgs = 'Bundle Deleted Successfully';
+                        $this->session->set_flashdata('suc_msgs', $suc_msgs);
+                    } else {
+                        $err_msgs = $result;
+                        $this->session->set_flashdata('err_msgs', $err_msgs);
+                    }
+                    redirect(current_url(), 'location', '301');
+                    //die("aaa");
+                    break;
                 default:
 
                     $this->session->set_flashdata('err_msgs', 'Parameter mismatch');
@@ -724,7 +740,7 @@ class Customers extends CI_Controller {
             elseif (check_logged_account_type(array('ADMIN', 'SUBADMIN'))) {
                 
             }
-            $option_param = array('ip' => true, 'callerid' => true, 'sipuser' => true, 'tariff' => true, 'user' => false, 'prefix' => false, 'dialplan' => true, 'translation_rules' => true, 'callerid_incoming' => true, 'translation_rules_incoming' => true, 'notification' => true);
+            $option_param = array('ip' => true, 'callerid' => true, 'sipuser' => true, 'tariff' => true, 'user' => false, 'prefix' => false, 'dialplan' => true, 'translation_rules' => true, 'callerid_incoming' => true, 'translation_rules_incoming' => true, 'notification' => true, 'bundle_package_group_by' => true);
             $customers_data_temp = $this->customer_mod->get_data($order_by, $per_page, $segment, $search_data, $option_param);
 
             if (isset($customers_data_temp['result']))
@@ -1675,6 +1691,87 @@ class Customers extends CI_Controller {
         $this->output
                 ->set_content_type('application/json')
                 ->set_output(json_encode($return));
+    }
+
+    public function addBundle($id1 = -1) {
+        $account_id = param_decrypt($id1);
+
+        if (strlen($account_id) < 1) {
+            show_404();
+        }
+        if (!check_account_permission('customer', 'edit')) {
+            show_404('403');
+        }
+        $page_name = "customer_addBundle";
+        $data['page_name'] = $page_name;
+        //$data['customer_type'] = $customer_type;
+
+        $this->load->model('Bundle_mod');
+        $data['sitesetup_data'] = $this->sitesetup_mod->get_sitesetup_data();
+        if (isset($_POST['action']) && $_POST['action'] == 'OkSaveData') {
+            $account_id = $_POST['account_id'];
+
+            $this->form_validation->set_rules('account_id', 'Customer ID', 'trim|required');
+            $this->form_validation->set_rules('bundle_package_id', 'Bundle', 'trim|required');
+            $this->form_validation->set_rules('bundle_package_desc', 'Description', 'trim');
+            $this->form_validation->set_rules('no_of_package', 'Number of Packahe', 'trim|required|numeric|greater_than[0]|less_than[1000]');
+
+
+            if ($this->form_validation->run() == FALSE) {
+                $data['err_msgs'] = validation_errors();
+            } else {
+                $time = 1;
+                while ($time <= $_POST['no_of_package']) {
+                    $result = $this->customer_mod->add_bundle($_POST);
+                    $time+=1;
+                }              
+                if ($result === true) {
+                    $this->session->set_flashdata('suc_msgs', 'Bundle & Package Added Successfully');
+                    if (isset($_POST['button_action']) && trim($_POST['button_action']) != '') {
+                        $action = trim($_POST['button_action']);
+                        if ($action == 'save')
+                            redirect(base_url('customers') . '/addBundle/' . param_encrypt($account_id), 'location', '301');
+                        elseif ($action == 'save_close')
+                            redirect(base_url('customers') . '/edit/' . param_encrypt($account_id), 'location', '301');
+                    } else {
+                        redirect(base_url('customers') . '/edit/' . param_encrypt($account_id), 'location', '301');
+                    }
+                } else {
+                    $err_msgs = $result;
+                    $data['err_msgs'] = $err_msgs;
+                }
+            }
+        }
+
+
+        $order_by = '';
+        $per_page = 1;
+        $segment = 0;
+        $search_data = array('account_id' => $account_id);
+        $option_param = array();
+        $customers_data_temp = $this->customer_mod->get_data($order_by, $per_page, $segment, $search_data, $option_param);
+        if (isset($customers_data_temp['result']))
+            $customers_data = current($customers_data_temp['result']);
+        else {
+            show_404();
+        }
+
+
+        $data['data'] = $customers_data;
+
+
+        $search_data = array('bundle_package_currency_id' => $customers_data['currency_id']);
+        if (check_logged_account_type(array('RESELLER', 'CUSTOMER'))) {
+            $created_by = get_logged_account_id();
+        } else {
+            $created_by = 'admin';
+        }
+        $response = $this->Bundle_mod->get_unassigned_data($account_id, $created_by, $search_data);
+        $data['bundle_data'] = $response;
+
+        $this->load->view('basic/header', $data);
+        $this->load->view('customer/bundleAdd', $data);
+        $this->load->view('basic/footer', $data);
     }
 
 }

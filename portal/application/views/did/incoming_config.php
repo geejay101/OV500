@@ -2,13 +2,13 @@
 // ##############################################################################
 // OV500 - Open Source SIP Switch & Pre-Paid & Post-Paid VoIP Billing Solution
 //
-// Copyright (C) 2019 Chinna Technologies  
+// Copyright (C) 2019-2020 Chinna Technologies   
 // Seema Anand <openvoips@gmail.com>
 // Anand <kanand81@gmail.com>
 // http://www.openvoips.com  http://www.openvoips.org
 //
 //
-// OV500 Version 1.0
+// OV500 Version 1.0.1
 // License https://www.gnu.org/licenses/agpl-3.0.html
 //
 // This program is free software: you can redistribute it and/or modify
@@ -85,7 +85,7 @@ $tab_index = 1;
                         <div class="col-md-7 col-sm-6 col-xs-12">
                             <select class="form-control" name="dst_type" id="dst_type" tabindex="<?php echo $tab_index++; ?>" data-parsley-required="">
                                 <option value="">Select Type</option>
-                                <option value="USER" <?php if ($dst_type == "USER") echo 'selected'; ?>>USER Based</option>
+                                <option value="CUSTOMER" <?php if ($dst_type == "CUSTOMER") echo 'selected'; ?>>USER Based</option>
                                 <option value="IP" <?php if ($dst_type == "IP") echo 'selected'; ?>>IP Based</option>
                                 <option value="PSTN" <?php if ($dst_type == "PSTN") echo 'selected'; ?>>PSTN Number</option>
                             </select>
@@ -154,7 +154,7 @@ $tab_index = 1;
                         <div class="col-md-7 col-sm-6 col-xs-12">
                             <select class="form-control" name="dst_type2" id="dst_type2" tabindex="<?php echo $tab_index++; ?>" >
                                 <option value="">Select Type</option>
-                                <option value="USER" <?php if ($dst_type2 == "USER") echo 'selected'; ?>>USER Based</option>
+                                <option value="CUSTOMER" <?php if ($dst_type2 == "CUSTOMER") echo 'selected'; ?>>USER Based</option>
                                 <option value="IP" <?php if ($dst_type2 == "IP") echo 'selected'; ?>>IP Based</option>
                                 <option value="PSTN" <?php if ($dst_type2 == "PSTN") echo 'selected'; ?>>PSTN Number</option>
                             </select>

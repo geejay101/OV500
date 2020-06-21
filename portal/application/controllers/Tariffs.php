@@ -2,13 +2,13 @@
 // ##############################################################################
 // OV500 - Open Source SIP Switch & Pre-Paid & Post-Paid VoIP Billing Solution
 //
-// Copyright (C) 2019 Chinna Technologies  
+// Copyright (C) 2019-2020 Chinna Technologies   
 // Seema Anand <openvoips@gmail.com>
 // Anand <kanand81@gmail.com>
 // http://www.openvoips.com  http://www.openvoips.org
 //
 //
-// OV500 Version 1.0
+// OV500 Version 1.0.1
 // License https://www.gnu.org/licenses/agpl-3.0.html
 //
 // This program is free software: you can redistribute it and/or modify
@@ -259,56 +259,13 @@ class Tariffs extends CI_Controller {
                     $data['err_msgs'] = $result['msg'];
                 }
             }
-        } elseif (isset($_POST['action']) && $_POST['action'] == 'OkUpdateData') {
-            $this->form_validation->set_rules('frm_id', 'Route ID', 'trim|required');
-            $this->form_validation->set_rules('frm_plan', 'Plan', 'trim|required|in_list[1,0]');
-            $this->form_validation->set_rules('frm_monthly_charge', 'Plan', 'trim|required|numeric');
-            if ($_POST['frm_bundle'] == 1) {
-                $this->form_validation->set_rules('bundle1_type', 'Bundle1 Type', 'trim|required|in_list[MINUTE,COST]');
-                $this->form_validation->set_rules('bundle1_value', 'Bundle1 Value', 'trim|required|numeric');
-                $this->form_validation->set_rules('bundle1_prefix', 'Bundle1 Prefix', 'trim|required|regex_match[/^[0-9,]*$/]');
-
-                if ($_POST['bundle2_value'] != '' || $_POST['bundle2_prefix'] != '') {
-                    $this->form_validation->set_rules('bundle2_type', 'Bundle2 Type', 'trim|required|in_list[MINUTE,COST]');
-                    $this->form_validation->set_rules('bundle2_value', 'Bundle2 Value', 'trim|required|numeric');
-                    $this->form_validation->set_rules('bundle2_prefix', 'Bundle2 Prefix', 'trim|required|regex_match[/^[0-9,]*$/]');
-                }
-
-                if ($_POST['bundle3_value'] != '' || $_POST['bundle3_prefix'] != '') {
-                    $this->form_validation->set_rules('bundle3_type', 'Bundle3 Type', 'trim|required|in_list[MINUTE,COST]');
-                    $this->form_validation->set_rules('bundle3_value', 'Bundle3 Value', 'trim|required|numeric');
-                    $this->form_validation->set_rules('bundle3_prefix', 'Bundle3 Prefix', 'trim|required|regex_match[/^[0-9,]*$/]');
-                }
-            }
-            if ($this->form_validation->run() == FALSE) {
-                $data['err_msgs'] = validation_errors();
-            } else {
-                $result = $this->tariff_mod->updateBundle($_POST);
-                if ($result['status']) {
-                    $this->session->set_flashdata('suc_msgs', 'Bundle Updated Successfully');
-                    if (isset($_POST['button_action_p_s']) && trim($_POST['button_action_p_s']) != '') {
-                        $action = trim($_POST['button_action_p_s']);
-                        if ($action == 'save')
-                            redirect(base_url() . 'tariffs/editTP/' . param_encrypt($tariff_id), 'location', '301');
-                        elseif ($action == 'save_close')
-                            redirect(base_url() . 'tariffs', 'location', '301');
-                    }
-                    else {
-                        redirect(base_url() . 'tariffs', 'location', '301');
-                    }
-                    redirect(base_url() . 'tariffs/editTP/' . param_encrypt($tariff_id), 'location', '301');
-                } else {
-                    $data['err_msgs'] = $result['msg'];
-                }
-            }
-        }
+        } elseif (isset($_POST['action']) && $_POST['action'] == 'OkUpdateData') {}
         $show_404 = false;
         if (!empty($tariff_id) && strlen($tariff_id) > 0) {
             $search_data = array('tariff_id' => $tariff_id);
             $response_data = $this->tariff_mod->get_data('', 0, RECORDS_PER_PAGE, $search_data, array());
             if ($response_data['total'] > 0) {
-                $data['data'] = $response_data['result'][0];
-                $data['bundle'] = $response_data['bundle'];
+                $data['data'] = $response_data['result'][0];             
                 $ratecard_response_data = $this->tariff_mod->get_mapping('', 0, RECORDS_PER_PAGE, array('tariff_id' => $response_data['result'][0]['tariff_id'], 'ratecard_for' => 'OUTGOING'), array());
                 $data['data_ratecard'] = $ratecard_response_data['result'];
 

@@ -2,13 +2,13 @@
 // ##############################################################################
 // OV500 - Open Source SIP Switch & Pre-Paid & Post-Paid VoIP Billing Solution
 //
-// Copyright (C) 2019 Chinna Technologies  
+// Copyright (C) 2019-2020 Chinna Technologies   
 // Seema Anand <openvoips@gmail.com>
 // Anand <kanand81@gmail.com>
 // http://www.openvoips.com  http://www.openvoips.org
 //
 //
-// OV500 Version 1.0
+// OV500 Version 1.0.1
 // License https://www.gnu.org/licenses/agpl-3.0.html
 //
 // This program is free software: you can redistribute it and/or modify
@@ -84,95 +84,6 @@ class Tariff_mod extends CI_Model {
                 $log_data_array[] = array('activity_type' => 'update', 'sql_table' => 'tariff', 'sql_key' => $where, 'sql_query' => $str);
             }
 
-            if ($this->db->trans_status() === FALSE) {
-                $error_array = $this->db->error();
-                $this->db->trans_rollback();
-                return array('status' => false, 'msg' => $error_array['message']);
-            } else {
-                $this->db->trans_commit();
-                set_activity_log($log_data_array);
-                return array('status' => true, 'msg' => 'Successfully updated');
-            }
-        } else {
-            return array('status' => false, 'msg' => 'KEY not found');
-        }
-    }
-
-    public function updateBundle($data) {
-        $log_data_array = array();
-        $data_array = array();
-        $data_array_incoming = array();
-        $data_array['package_option'] = '0';
-        $data_array['monthly_charges'] = 0;
-        $data_array['bundle_option'] = '0';
-        $data_array['bundle1_type'] = $data_array['bundle2_type'] = $data_array['bundle3_type'] = 'MINUTE';
-        $data_array['bundle1_value'] = 0;
-        $data_array['bundle2_value'] = $data_array['bundle3_value'] = '';
-        $data_array_incoming['bundle1_prefix'] = $data_array_incoming['bundle2_prefix'] = $data_array_incoming['bundle3_prefix'] = '';
-        if ($data['frm_plan'] == 1) {
-            $data_array['package_option'] = '1';
-            $data_array['monthly_charges'] = $data['frm_monthly_charge'];
-            if ($data['frm_bundle'] == 1) {
-                $data_array['bundle_option'] = '1';
-                $data_array['bundle1_type'] = $data['bundle1_type'];
-                $data_array['bundle1_value'] = $data['bundle1_value'];
-                $data_array_incoming['bundle1_prefix'] = $data['bundle1_prefix'];
-                $data_array['bundle2_type'] = $data['bundle2_type'];
-                $data_array['bundle2_value'] = $data['bundle2_value'];
-                $data_array_incoming['bundle2_prefix'] = $data['bundle2_prefix'];
-                $data_array['bundle3_type'] = $data['bundle3_type'];
-                $data_array['bundle3_value'] = $data['bundle3_value'];
-                $data_array_incoming['bundle3_prefix'] = $data['bundle3_prefix'];
-            }
-        }
-        $data_array['update_dt'] = date('Y-m-d H:i:s');
-        if (isset($data['frm_key'])) {
-            $this->db->trans_begin();
-            if (count($data_array) > 0) {
-                if ($data_array['bundle2_value'] == '')
-                    $data_array['bundle2_value'] = NULL;
-                if ($data_array['bundle3_value'] == '')
-                    $data_array['bundle3_value'] = NULL;
-                $where = "tariff_id='" . $data['frm_key'] . "'";
-                $str = $this->db->update_string('tariff', $data_array, $where);
-                $result = $this->db->query($str);
-                $log_data_array[] = array('activity_type' => 'update', 'sql_table' => 'tariff', 'sql_key' => $where, 'sql_query' => $str);
-                $str = $this->db->where('tariff_id', $data['frm_key'])->get_compiled_delete('tariff_bundle_prefixes');
-                $result = $this->db->query($str);
-                if (!$result) {
-                    $error_array = $this->db->error();
-                    throw new Exception($error_array['message']);
-                }
-                $data_in = array();
-                $prefix1 = explode(',', $data_array_incoming['bundle1_prefix']);
-                if (count($prefix1) > 0) {
-                    for ($x = 0; $x < count($prefix1); $x++) {
-                        if ($prefix1[$x] != '')
-                            $data_in[] = array('tariff_id' => $data['frm_key'], 'bundle_id' => 1, 'prefix' => $prefix1[$x]);
-                    }
-                }
-                $prefix2 = explode(',', $data_array_incoming['bundle2_prefix']);
-                if (count($prefix2) > 0) {
-                    for ($x = 0; $x < count($prefix2); $x++) {
-                        if ($prefix2[$x] != '')
-                            $data_in[] = array('tariff_id' => $data['frm_key'], 'bundle_id' => 2, 'prefix' => $prefix2[$x]);
-                    }
-                }
-                $prefix3 = explode(',', $data_array_incoming['bundle3_prefix']);
-                if (count($prefix3) > 0) {
-                    for ($x = 0; $x < count($prefix3); $x++) {
-                        if ($prefix3[$x] != '')
-                            $data_in[] = array('tariff_id' => $data['frm_key'], 'bundle_id' => 3, 'prefix' => $prefix3[$x]);
-                    }
-                }
-                if (count($data_in) != 0) {
-                    $result = $this->db->insert_batch('tariff_bundle_prefixes', $data_in);
-                    if (!$result) {
-                        $error_array = $this->db->error();
-                        throw new Exception($error_array['message']);
-                    }
-                }
-            }
             if ($this->db->trans_status() === FALSE) {
                 $error_array = $this->db->error();
                 $this->db->trans_rollback();
@@ -307,15 +218,6 @@ class Tariff_mod extends CI_Model {
 
             $query = $this->db->query('SELECT FOUND_ROWS() AS Count');
             $final_return_array["total"] = $query->row()->Count;
-
-            if ($final_return_array['result']) {
-                if (strlen($final_return_array['result'][0]['tariff_id']) > 0) {
-                    $q = $this->db->query("SELECT bundle_id, group_concat(prefix) as prefixes FROM tariff_bundle_prefixes WHERE tariff_id = '" . $final_return_array['result'][0]['tariff_id'] . "' group by bundle_id order by bundle_id");
-                    $final_return_array['bundle'] = $q->result_array();
-                }
-            } else {
-                $final_return_array['bundle'] = '';
-            }
 
             $final_return_array['status'] = 'success';
             $final_return_array['message'] = 'Tariff List fetched successfully';

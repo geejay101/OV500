@@ -1,14 +1,15 @@
 <?php
+
 // ##############################################################################
 // OV500 - Open Source SIP Switch & Pre-Paid & Post-Paid VoIP Billing Solution
 //
-// Copyright (C) 2019 Chinna Technologies  
+// Copyright (C) 2019-2020 Chinna Technologies   
 // Seema Anand <openvoips@gmail.com>
 // Anand <kanand81@gmail.com>
 // http://www.openvoips.com  http://www.openvoips.org
 //
 //
-// OV500 Version 1.0
+// OV500 Version 1.0.1
 // License https://www.gnu.org/licenses/agpl-3.0.html
 //
 // This program is free software: you can redistribute it and/or modify
@@ -41,7 +42,7 @@ class Resellers extends CI_Controller {
             show_404('403');
     }
 
-      function rState($id = -1) {
+    function rState($id = -1) {
         $page_name = "rState";
         $data['page_name'] = $page_name;
         $this->load->model('report_mod');
@@ -64,8 +65,8 @@ class Resellers extends CI_Controller {
                 $search_data['account_id'] = $id_decrypted;
 
             $endusers_data_temp = $this->reseller_mod->get_data('', 1, 0, $search_data);
-            
-         //   print_r($endusers_data_temp);
+
+            //   print_r($endusers_data_temp);
             if (isset($endusers_data_temp['result'])) {
                 $endusers_data = current($endusers_data_temp['result']);
 
@@ -95,10 +96,10 @@ class Resellers extends CI_Controller {
         $time_range = $date_from . ' - ' . $date_to;
 
         if (isset($search_account_id) && $search_account_id != '')
-            $account_id = $search_account_id;      
-        
-        $account_level = $endusers_data['account_level'];        
-        
+            $account_id = $search_account_id;
+
+        $account_level = $endusers_data['account_level'];
+
         $report_data = $this->report_mod->reseller_call_sipcode_review($account_id, $date_from, $date_to, $src_ipaddress, $prefix_name, $account_level);
         $data['report_data'] = $report_data;
         $data['account_id'] = $account_id;
@@ -111,7 +112,7 @@ class Resellers extends CI_Controller {
         $this->load->view('reports/cState', $data);
         $this->load->view('basic/footer', $data);
     }
-    
+
     function myplan($account_id = '') {
         $account_id = param_decrypt($account_id);
         if (strlen($account_id) > 0) {
@@ -141,136 +142,134 @@ class Resellers extends CI_Controller {
         }
     }
 
-    
     function statement($id = -1, $arg1 = '', $format = '') {
-    $page_name = "r_statement";
-    $data['page_name'] = $page_name;
-    $this->load->model('report_mod');
-    $this->load->model('payment_mod');
+        $page_name = "r_statement";
+        $data['page_name'] = $page_name;
+        $this->load->model('report_mod');
+        $this->load->model('payment_mod');
 
-    $data['sitesetup_data'] = $this->sitesetup_mod->get_sitesetup_data();
+        $data['sitesetup_data'] = $this->sitesetup_mod->get_sitesetup_data();
 
 
 //==========export pdf start==========================			
-    if ($arg1 == 'export' && $format != '') {
+        if ($arg1 == 'export' && $format != '') {
 
-        if ($id != -1) {
-            $account_id = param_decrypt($id);
-        }
-
-        $format = param_decrypt($format);
-
-        $customer_result = $this->member_mod->get_account_by_key('account_id', $account_id);
-        if (!$customer_result) {
-            $data['statement_error_message'] = 'Account Not Found';
-        }
-
-        $search_data = array('yearmonth' => $_SESSION['search_sdr_summary_data']['s_yearmonth']);
-
-        $report_data = $this->report_mod->sdr_statement($account_id, $search_data);
-
-        $yearmonth = $_SESSION['search_sdr_summary_data']['s_yearmonth'];
-        $year = substr($yearmonth, 0, 4);
-        $month = substr($yearmonth, 4);
-
-        $date = $year . '-' . $month . '-01';
-        $month_year = date('F-Y', strtotime($date));
-        $customer_dp = $customer_result['dp'];
-        if (!$customer_dp || $customer_dp == '')
-            $customer_dp = 2;
-        $sdr_terms = $this->utils_model->get_sdr_terms();
-
-        $file_name = "account_statements";
-        $this->load->library('Export');
-
-        if (count($report_data['result']) > 0) {
-            if ($format == 'pdf') {
-                $downloaded_message = $this->export->download_pdf($file_name, $report_data, $sdr_terms, $customer_dp, $month_year, $account_id);
-            } elseif ($format == 'xlsx') {
-                $downloaded_message = $this->export->download_excel($file_name, $report_data, $sdr_terms, $customer_dp, $month_year, $account_id, $format);
+            if ($id != -1) {
+                $account_id = param_decrypt($id);
             }
-        } else {
-            
+
+            $format = param_decrypt($format);
+
+            $customer_result = $this->member_mod->get_account_by_key('account_id', $account_id);
+            if (!$customer_result) {
+                $data['statement_error_message'] = 'Account Not Found';
+            }
+
+            $search_data = array('yearmonth' => $_SESSION['search_sdr_summary_data']['s_yearmonth']);
+
+            $report_data = $this->report_mod->sdr_statement($account_id, $search_data);
+
+            $yearmonth = $_SESSION['search_sdr_summary_data']['s_yearmonth'];
+            $year = substr($yearmonth, 0, 4);
+            $month = substr($yearmonth, 4);
+
+            $date = $year . '-' . $month . '-01';
+            $month_year = date('F-Y', strtotime($date));
+            $customer_dp = $customer_result['dp'];
+            if (!$customer_dp || $customer_dp == '')
+                $customer_dp = 2;
+            $sdr_terms = $this->utils_model->get_sdr_terms();
+
+            $file_name = "account_statements";
+            $this->load->library('Export');
+
+            if (count($report_data['result']) > 0) {
+                if ($format == 'pdf') {
+                    $downloaded_message = $this->export->download_pdf($file_name, $report_data, $sdr_terms, $customer_dp, $month_year, $account_id);
+                } elseif ($format == 'xlsx') {
+                    $downloaded_message = $this->export->download_excel($file_name, $report_data, $sdr_terms, $customer_dp, $month_year, $account_id, $format);
+                }
+            } else {
+                
+            }
+
+
+            if (gettype($downloaded_message) == 'string')
+                $data['err_msgs'] = $downloaded_message;
         }
-
-
-        if (gettype($downloaded_message) == 'string')
-            $data['err_msgs'] = $downloaded_message;
-    }
 
 //================================export pdf end===========================
 
 
-    if (check_logged_account_type(array('RESELLER', 'CUSTOMER'))) {
-        $account_id = get_logged_account_id();
-    } elseif (isset($_POST['search_action']) && isset($_POST['account_id']) && $_POST['account_id'] != '') {
-        $account_id = trim($_POST['account_id']);
-    } elseif (isset($_POST['invoice_search_action']) && isset($_POST['account_id']) && $_POST['account_id'] != '') {
-        $account_id = trim($_POST['account_id']);
-    } elseif ($id != -1) {
-        $account_id = param_decrypt($id);
-    }
-
-
-
-    if (isset($account_id) && $account_id != '') {
-        $customer_result = $this->member_mod->get_account_by_key('account_id', $account_id);
-        //print_r($customer_result);
-        //echo $customer_result['billing_type'];
-        if (!$customer_result) {
-            $data['statement_error_message'] = 'Account Not Found';
+        if (check_logged_account_type(array('RESELLER', 'CUSTOMER'))) {
+            $account_id = get_logged_account_id();
+        } elseif (isset($_POST['search_action']) && isset($_POST['account_id']) && $_POST['account_id'] != '') {
+            $account_id = trim($_POST['account_id']);
+        } elseif (isset($_POST['invoice_search_action']) && isset($_POST['account_id']) && $_POST['account_id'] != '') {
+            $account_id = trim($_POST['account_id']);
+        } elseif ($id != -1) {
+            $account_id = param_decrypt($id);
         }
 
-        $active_tab = 'tab_statement'; //default active tab
 
-        if (isset($_POST['search_action'])) {// coming from search button account statement
-            $_SESSION['search_sdr_summary_data'] = array('s_yearmonth' => $_POST['yearmonth'], 's_yearmonth_invoice' => $_POST['yearmonth']);
-        } elseif (isset($_POST['invoice_search_action'])) {// coming from search button invoice
-            $_SESSION['search_sdr_summary_data'] = array('s_yearmonth' => $_POST['yearmonth'], 's_yearmonth_invoice' => $_POST['yearmonth']);
-            $active_tab = 'tab_invoice';
-        } else {
-            $_SESSION['search_sdr_summary_data']['s_yearmonth'] = isset($_SESSION['search_sdr_summary_data']['s_yearmonth']) ? $_SESSION['search_sdr_summary_data']['s_yearmonth'] : date("Ym");
 
-            $_SESSION['search_sdr_summary_data']['s_yearmonth_invoice'] = isset($_SESSION['search_sdr_summary_data']['s_yearmonth_invoice']) ? $_SESSION['search_sdr_summary_data']['s_yearmonth_invoice'] : date("Ym");
-        }
-
-        $search_data = array('yearmonth' => $_SESSION['search_sdr_summary_data']['s_yearmonth']);
-
-        $report_data = $this->report_mod->sdr_statement($account_id, $search_data);
-
-        $data['active_tab'] = $active_tab;
-        $data['customer_dp'] = $customer_result['dp'];
-        $data['sdr_terms'] = $this->utils_model->get_sdr_terms();
-        $data['searched_account_id'] = $account_id;
-        $data['data'] = $report_data;
-        $data['billing_type'] = $customer_result['billing_type'];
-        ////invoice data//////
-        if ($customer_result['billing_type'] == 'prepaid') {
-            $yearmonth = $_SESSION['search_sdr_summary_data']['s_yearmonth_invoice'];
-            $year = substr($yearmonth, 0, 4);
-            $month = substr($yearmonth, -2);
-            if (intval($year) < 2019 || (intval($year) == 2019 && intval($month) < 4)) {//no invoice before April 2019
-                $year = '2019';
-                $month = '04';
-                $_SESSION['search_sdr_summary_data']['s_yearmonth_invoice'] = $year . $month;
+        if (isset($account_id) && $account_id != '') {
+            $customer_result = $this->member_mod->get_account_by_key('account_id', $account_id);
+            //print_r($customer_result);
+            //echo $customer_result['billing_type'];
+            if (!$customer_result) {
+                $data['statement_error_message'] = 'Account Not Found';
             }
-            $from = $year . '-' . $month . '-01 00:00:00';
-            $to = date('Y-m-d 23:59:59', strtotime('last day of ' . $from));
-            $date_range = $from . ' - ' . $to;
 
-            $search_data = array('account_id' => $account_id, 'payment_option_id' => 'ADDBALANCE', 'date_range' => $date_range);
-            $order_by = '';
-            $data_array = $this->payment_mod->get_data($order_by, '', '', $search_data);
-            if (isset($data_array['result']))
-                $data['payment_history'] = $data_array['result'];
+            $active_tab = 'tab_statement'; //default active tab
+
+            if (isset($_POST['search_action'])) {// coming from search button account statement
+                $_SESSION['search_sdr_summary_data'] = array('s_yearmonth' => $_POST['yearmonth'], 's_yearmonth_invoice' => $_POST['yearmonth']);
+            } elseif (isset($_POST['invoice_search_action'])) {// coming from search button invoice
+                $_SESSION['search_sdr_summary_data'] = array('s_yearmonth' => $_POST['yearmonth'], 's_yearmonth_invoice' => $_POST['yearmonth']);
+                $active_tab = 'tab_invoice';
+            } else {
+                $_SESSION['search_sdr_summary_data']['s_yearmonth'] = isset($_SESSION['search_sdr_summary_data']['s_yearmonth']) ? $_SESSION['search_sdr_summary_data']['s_yearmonth'] : date("Ym");
+
+                $_SESSION['search_sdr_summary_data']['s_yearmonth_invoice'] = isset($_SESSION['search_sdr_summary_data']['s_yearmonth_invoice']) ? $_SESSION['search_sdr_summary_data']['s_yearmonth_invoice'] : date("Ym");
+            }
+
+            $search_data = array('yearmonth' => $_SESSION['search_sdr_summary_data']['s_yearmonth']);
+
+            $report_data = $this->report_mod->sdr_statement($account_id, $search_data);
+
+            $data['active_tab'] = $active_tab;
+            $data['customer_dp'] = $customer_result['dp'];
+            $data['sdr_terms'] = $this->utils_model->get_sdr_terms();
+            $data['searched_account_id'] = $account_id;
+            $data['data'] = $report_data;
+            $data['billing_type'] = $customer_result['billing_type'];
+            ////invoice data//////
+            if ($customer_result['billing_type'] == 'prepaid') {
+                $yearmonth = $_SESSION['search_sdr_summary_data']['s_yearmonth_invoice'];
+                $year = substr($yearmonth, 0, 4);
+                $month = substr($yearmonth, -2);
+                if (intval($year) < 2019 || (intval($year) == 2019 && intval($month) < 4)) {//no invoice before April 2019
+                    $year = '2019';
+                    $month = '04';
+                    $_SESSION['search_sdr_summary_data']['s_yearmonth_invoice'] = $year . $month;
+                }
+                $from = $year . '-' . $month . '-01 00:00:00';
+                $to = date('Y-m-d 23:59:59', strtotime('last day of ' . $from));
+                $date_range = $from . ' - ' . $to;
+
+                $search_data = array('account_id' => $account_id, 'payment_option_id' => 'ADDBALANCE', 'date_range' => $date_range);
+                $order_by = '';
+                $data_array = $this->payment_mod->get_data($order_by, '', '', $search_data);
+                if (isset($data_array['result']))
+                    $data['payment_history'] = $data_array['result'];
+            }
         }
+
+        $this->load->view('basic/header', $data);
+        $this->load->view('reports/sdr_statement', $data);
+        $this->load->view('basic/footer', $data);
     }
-
-    $this->load->view('basic/header', $data);
-    $this->load->view('reports/sdr_statement', $data);
-    $this->load->view('basic/footer', $data);
-}
-
 
     function index($arg1 = '', $format = '', $reseller_type = 'reseller') {
         $page_name = "{$reseller_type}_index";
@@ -315,7 +314,6 @@ class Resellers extends CI_Controller {
             $_SESSION['search_resellers_data']['s_status'] = isset($_SESSION['search_resellers_data']['s_status']) ? $_SESSION['search_resellers_data']['s_status'] : '';
             $_SESSION['search_resellers_data']['s_account_id'] = isset($_SESSION['search_resellers_data']['s_account_id']) ? $_SESSION['search_resellers_data']['s_account_id'] : '';
             $_SESSION['search_resellers_data']['s_no_of_records'] = isset($_SESSION['search_resellers_data']['s_no_of_records']) ? $_SESSION['search_resellers_data']['s_no_of_records'] : '';
-            
         }
         $search_data = array('name' => $_SESSION['search_resellers_data']['s_name'], 'account_status' => $_SESSION['search_resellers_data']['s_status'], 'account_id' => $_SESSION['search_resellers_data']['s_account_id']);
         if (check_logged_account_type(array('agent')))
@@ -361,21 +359,21 @@ class Resellers extends CI_Controller {
 
             $pagination_uri_segment = 3;
             $per_page = RECORDS_PER_PAGE;
-                       
-             if (isset($_SESSION['search_resellers_data']['s_no_of_records']) && $_SESSION['search_resellers_data']['s_no_of_records'] != '')
+
+            if (isset($_SESSION['search_resellers_data']['s_no_of_records']) && $_SESSION['search_resellers_data']['s_no_of_records'] != '')
                 $per_page = $_SESSION['search_resellers_data']['s_no_of_records'];
             else
                 $per_page = RECORDS_PER_PAGE;
-           
+
             if ($this->uri->segment($pagination_uri_segment) == '') {
                 $segment = 0;
             } else {
                 $segment = $this->uri->segment($pagination_uri_segment);
             }
-            
-            $option_param = array('tariff' => true, 'balance' => true, 'currency' => true);
+
+            $option_param = array('tariff' => true, 'balance' => true, 'currency' => true, 'bundle_package_group_by' => true);
             $resellers_data = $this->reseller_mod->get_data($order_by, $per_page, $segment, $search_data, $option_param);
-           $data['total_records'] =    $total = $this->reseller_mod->get_data_total_count();
+            $data['total_records'] = $total = $this->reseller_mod->get_data_total_count();
             $config = array();
             $config = $this->utils_model->setup_pagination_option($total, $reseller_type . 's/index', $per_page, $pagination_uri_segment);
             $this->pagination->initialize($config);
@@ -396,8 +394,8 @@ class Resellers extends CI_Controller {
         $data['reseller_type'] = $reseller_type;
         $data['sitesetup_data'] = $this->sitesetup_mod->get_sitesetup_data();
         if (isset($_POST['action']) && $_POST['action'] == 'OkSaveData') {
-             if($_POST['vat_flag']== 'NONE')
-                $_POST['tax_type']='exclusive';
+            if ($_POST['vat_flag'] == 'NONE')
+                $_POST['tax_type'] = 'exclusive';
             $this->form_validation->set_rules('account_cc', 'CC', 'trim|required');
             $this->form_validation->set_rules('account_cps', 'CPS', 'trim|required');
             $this->form_validation->set_rules('dp', 'DP', 'trim|required');
@@ -438,8 +436,8 @@ class Resellers extends CI_Controller {
                     $_POST['parent_account_id'] = '';
                 if ($_POST['media_rtpproxy'] == 0) {
                     $_POST['media_transcoding'] = '0';
-                }               
-                $result = $this->reseller_mod->add($_POST);            
+                }
+                $result = $this->reseller_mod->add($_POST);
                 if ($result === true) {
                     $account_id = $this->reseller_mod->account_id;
                     $this->session->set_flashdata('suc_msgs', 'Resellers Added Successfully');
@@ -520,6 +518,22 @@ class Resellers extends CI_Controller {
                     }
                     redirect(current_url(), 'location', '301');
                     break;
+                case 'account_bundle_delete':
+                    $delete_id_array = json_decode($_POST['delete_id']);
+                    // $logged_account_type = get_logged_account_type();
+                    // $logged_account_id = get_logged_account_id();
+                    $delete_param_array = array('delete_id' => $delete_id_array);
+                    $result = $this->reseller_mod->delete_bundle($account_id, $delete_param_array);
+                    if ($result === true) {
+                        $suc_msgs = 'Bundle Deleted Successfully';
+                        $this->session->set_flashdata('suc_msgs', $suc_msgs);
+                    } else {
+                        $err_msgs = $result;
+                        $this->session->set_flashdata('err_msgs', $err_msgs);
+                    }
+                    redirect(current_url(), 'location', '301');
+                    //die("aaa");
+                    break;
                 default:
                     $this->session->set_flashdata('err_msgs', 'Parameter mismatch');
                     redirect(current_url(), 'location', '301');
@@ -527,8 +541,8 @@ class Resellers extends CI_Controller {
         }
 
         if (isset($_POST['action']) && $_POST['action'] == 'OkSaveData') {
-             if($_POST['vat_flag']== 'NONE')
-                $_POST['tax_type']='exclusive';
+            if ($_POST['vat_flag'] == 'NONE')
+                $_POST['tax_type'] = 'exclusive';
             $account_id = $_POST['account_id'];
             $data['account_id'] = $account_id;
             $this->form_validation->set_rules('account_id', 'Account ID', 'trim|required');
@@ -607,7 +621,7 @@ class Resellers extends CI_Controller {
                 $search_data['account_level'] = '1';
 
 
-            $option_param = array('callerid' => true, 'tariff' => true, 'account' => true, 'dialplan' => true, 'translation_rules' => true, 'callerid_incoming' => true, 'translation_rules_incoming' => true);
+            $option_param = array('callerid' => true, 'tariff' => true, 'account' => true, 'dialplan' => true, 'translation_rules' => true, 'callerid_incoming' => true, 'translation_rules_incoming' => true, 'bundle_package_group_by' => true);
             $resellers_data_temp = $this->reseller_mod->get_data($order_by, $per_page, $segment, $search_data, $option_param);
             if (isset($resellers_data_temp['result']))
                 $resellers_data = current($resellers_data_temp['result']);
@@ -1035,6 +1049,86 @@ class Resellers extends CI_Controller {
 
         $this->load->view('basic/header', $data);
         $this->load->view('reseller/addDP', $data);
+        $this->load->view('basic/footer', $data);
+    }
+
+    public function addBundle($id1 = -1) {
+        $account_id = param_decrypt($id1);
+
+        if (strlen($account_id) < 1) {
+            show_404();
+        }
+        if (!check_account_permission('customer', 'edit')) {
+            show_404('403');
+        }
+        $page_name = "customer_addBundle";
+        $data['page_name'] = $page_name;
+        //$data['customer_type'] = $customer_type;
+
+        $this->load->model('Bundle_mod');
+        $data['sitesetup_data'] = $this->sitesetup_mod->get_sitesetup_data();
+        if (isset($_POST['action']) && $_POST['action'] == 'OkSaveData') {
+            $account_id = $_POST['account_id'];
+
+            $this->form_validation->set_rules('account_id', 'Reseller ID', 'trim|required');
+            $this->form_validation->set_rules('bundle_package_id', 'Bundle', 'trim|required');
+            $this->form_validation->set_rules('bundle_package_desc', 'Description', 'trim');
+            $this->form_validation->set_rules('no_of_package', 'Number of Packahe', 'trim|required|numeric|greater_than[0]|less_than[1000]');
+
+            if ($this->form_validation->run() == FALSE) {
+                $data['err_msgs'] = validation_errors();
+            } else {
+                $time = 1;
+                while ($time <= $_POST['no_of_package']) {
+                    $result = $this->reseller_mod->add_bundle($_POST);
+                    $time+=1;
+                }
+                if ($result === true) {
+                    $this->session->set_flashdata('suc_msgs', 'Bundle & Package Added Successfully');
+                    if (isset($_POST['button_action']) && trim($_POST['button_action']) != '') {
+                        $action = trim($_POST['button_action']);
+                        if ($action == 'save')
+                            redirect(base_url('resellers') . '/addBundle/' . param_encrypt($account_id), 'location', '301');
+                        elseif ($action == 'save_close')
+                            redirect(base_url('resellers') . '/edit/' . param_encrypt($account_id), 'location', '301');
+                    } else {
+                        redirect(base_url('resellers') . '/edit/' . param_encrypt($account_id), 'location', '301');
+                    }
+                } else {
+                    $err_msgs = $result;
+                    $data['err_msgs'] = $err_msgs;
+                }
+            }
+        }
+
+
+        $order_by = '';
+        $per_page = 1;
+        $segment = 0;
+        $search_data = array('account_id' => $account_id);
+        $option_param = array();
+        $customers_data_temp = $this->reseller_mod->get_data($order_by, $per_page, $segment, $search_data, $option_param);
+        if (isset($customers_data_temp['result']))
+            $customers_data = current($customers_data_temp['result']);
+        else {
+            show_404();
+        }
+
+
+        $data['data'] = $customers_data;
+
+
+        $search_data = array('bundle_package_currency_id' => $customers_data['currency_id']);
+        if (check_logged_account_type(array('RESELLER', 'CUSTOMER'))) {
+            $created_by = get_logged_account_id();
+        } else {
+            $created_by = 'admin';
+        }
+        $response = $this->Bundle_mod->get_unassigned_data($account_id, $created_by, $search_data);
+        $data['bundle_data'] = $response;
+
+        $this->load->view('basic/header', $data);
+        $this->load->view('reseller/bundleAdd', $data);
         $this->load->view('basic/footer', $data);
     }
 

@@ -3,13 +3,13 @@
 // ##############################################################################
 // OV500 - Open Source SIP Switch & Pre-Paid & Post-Paid VoIP Billing Solution
 //
-// Copyright (C) 2019 Chinna Technologies  
+// Copyright (C) 2019-2020 Chinna Technologies   
 // Seema Anand <openvoips@gmail.com>
 // Anand <kanand81@gmail.com>
 // http://www.openvoips.com  http://www.openvoips.org
 //
 //
-// OV500 Version 1.0
+// OV500 Version 1.0.1
 // License https://www.gnu.org/licenses/agpl-3.0.html
 //
 // This program is free software: you can redistribute it and/or modify
@@ -141,7 +141,7 @@ and date_add(call_date, interval concat(calltime_h,':',calltime_m) HOUR_MINUTE) 
         $logged_customer_level = get_logged_account_level();
         $DB1 = $this->load->database('cdrdb', true);
         if ($livecalls_destination == 'Y') {
-            $str = "SELECT customer_destination, count(id) total_calls, sum( if(callstatus = 'answer',1,0)) answering, sum( if(callstatus <> 'answer',1,0)) ringing FROM livecalls GROUP BY customer_destination ORDER BY total_calls DESC";
+            $str = "SELECT concat( call_flow, '::',customer_destination) as customer_destination, count(id) total_calls, sum( if(callstatus = 'answer',1,0)) answering, sum( if(callstatus <> 'answer',1,0)) ringing FROM livecalls GROUP BY call_flow, customer_destination ORDER BY total_calls DESC";
             $result = $this->db->query($str);
             $return['livecalls_destination'] = $result->result_array();
         }
@@ -155,7 +155,7 @@ and date_add(call_date, interval concat(calltime_h,':',calltime_m) HOUR_MINUTE) 
 
         if ($carrier_call_stat == 'Y') {
             $tablecarrierstate = date('Ym') . '_carrierstate';
-            $str = "SELECT  concat(carrier_name ,' (',carrier_id,')') carrier_id,
+            $str = "SELECT  concat(cdr_type,'::', carrier_name ,' (',carrier_id,')') carrier_id,
                         IFNULL(SUM(totalcalls),0) tot_calls,
 						IFNULL(SUM(answeredcalls),0) tot_answered,
 						IFNULL(round((SUM(answeredcalls)/SUM(totalcalls))*100),0) asr, 
@@ -165,7 +165,7 @@ and date_add(call_date, interval concat(calltime_h,':',calltime_m) HOUR_MINUTE) 
 					WHERE call_date =  '" . date('Y-m-d') . "'
 					  AND calltime_h >= HOUR(NOW())-1
 					  AND calltime_m >= MINUTE(NOW())-1
-					GROUP BY carrier_id
+					GROUP BY carrier_id, cdr_type
                     ORDER BY asr, tot_calls DESC
 				";
             $result = $DB1->query($str);
@@ -261,12 +261,12 @@ and date_add(call_date, interval concat(calltime_h,':',calltime_m) HOUR_MINUTE) 
         }
 
         if ($gateway_calls == 'Y') {
-            $str = "select HIGH_PRIORITY carrier_id  as name, carrier_ipaddress as ip,count(*) as total_calls ,
+            $str = "select HIGH_PRIORITY concat(call_flow,'::',carrier_id)  as name, carrier_ipaddress as ip,count(*) as total_calls ,
 	sum(if(callstatus = 'answer',1,0)) as 'answer',
 	sum(if(callstatus = 'ring',1,0)) as 'ringing',
 	sum(if(callstatus = 'progress',1,0)) as 'progress'
 	from livecalls where 1 
-	group by carrier_name, carrier_ipaddress order by carrier_name asc";
+	group by call_flow, carrier_name, carrier_ipaddress order by carrier_name asc";
 
             //$result = $DB1->query($str);
             $result = $this->db->query($str);
@@ -274,23 +274,23 @@ and date_add(call_date, interval concat(calltime_h,':',calltime_m) HOUR_MINUTE) 
         }
 
         if ($customer_calls == 'Y') {
-            $str = "select HIGH_PRIORITY customer_company as name, 'enduser' as type ,customer_ipaddress as ip,count(*) as total_calls ,
+            $str = "select HIGH_PRIORITY concat(call_flow,'::',customer_company) as name, 'enduser' as type ,customer_ipaddress as ip,count(*) as total_calls ,
 sum(if(callstatus = 'answer',1,0)) as 'answer',
 sum(if(callstatus = 'ring',1,0)) as 'ringing',
 sum(if(callstatus = 'progress',1,0)) as 'progress'
 from livecalls where reseller1_account_id is NULL 
-group by customer_account_id, customer_ipaddress order by customer_company ,total_calls desc ";
+group by call_flow, customer_account_id, customer_ipaddress order by customer_company ,total_calls desc ";
 
             // $result = $DB1->query($str);
             $result = $this->db->query($str);
             $customer_calls = $result->result_array();
 
-            $str = "select HIGH_PRIORITY reseller1_account_id as name, 'reseller' as type ,customer_ipaddress as ip,count(*) as total_calls ,
+            $str = "select HIGH_PRIORITY concat(call_flow,'::',reseller1_account_id) as name, 'reseller' as type ,customer_ipaddress as ip,count(*) as total_calls ,
 sum(if(callstatus = 'answer',1,0)) as 'answer',
 sum(if(callstatus = 'ring',1,0)) as 'ringing',
 sum(if(callstatus = 'progress',1,0)) as 'progress'
 from livecalls where reseller1_account_id is not NULL 
-group by reseller1_account_id order by total_calls desc ";
+group by call_flow, reseller1_account_id order by total_calls desc ";
 
             //  $result = $DB1->query($str);
             $result = $this->db->query($str);
