@@ -144,7 +144,7 @@ define('SITE_FULL_NAME', 'OV500 Billing and Switching Software');
 define('SDR_API_URL', 'https://openvoips.org/portal/api/sdrapi.php');
 define('LOGO_IMAGE', 'logo.png');
 
-define('MOMENT_TIMEZONE', 'Asia/Calcutta');
+define('MOMENT_TIMEZONE', 'America/Los_Angeles');
 
 
 define('SITE_MAIL_FROM', 'kanand81@gmail.com');

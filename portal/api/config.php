@@ -11,6 +11,12 @@
 // OV500 Version 1.0.1
 // License https://www.gnu.org/licenses/agpl-3.0.html
 //
+//
+// The Initial Developer of the Original Code is
+// Anand Kumar <kanand81@gmail.com> & Seema Anand <openvoips@gmail.com>
+// Portions created by the Initial Developer are Copyright (C)
+// the Initial Developer. All Rights Reserved.
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
 // published by the Free Software Foundation, either version 3 of the
@@ -34,6 +40,6 @@ define('SWITCH_DSN', 'mysql:dbname=switch;host=localhost');
 define('SWITCH_DSN_LOGIN', 'ovswitch');
 define('SWITCH_DSN_PASSWORD', 'ovswitch123');
 define('LOGPATH', 'log/');
-define('LOGWRITE', '0');
+define('LOGWRITE', '1');
 define('DBLOGWRITE', '1');
 ?>

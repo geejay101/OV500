@@ -10,6 +10,12 @@
 // OV500 Version 1.0.1
 // License https://www.gnu.org/licenses/agpl-3.0.html
 //
+//
+// The Initial Developer of the Original Code is
+// Anand Kumar <kanand81@gmail.com> & Seema Anand <openvoips@gmail.com>
+// Portions created by the Initial Developer are Copyright (C)
+// the Initial Developer. All Rights Reserved.
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
 // published by the Free Software Foundation, either version 3 of the
@@ -33,6 +39,8 @@ class Did_mod extends CI_Model {
         parent::__construct();
         $this->load->database();
     }
+	
+	
 
     function get_data($order_by = '', $limit_to = '', $limit_from = '', $filter_data = array(), $option_param = array()) {
         $final_return_array = $carrier_id_array = $did_id_carrier_id_mapping_array = array();
@@ -777,7 +785,7 @@ INNER JOIN tariff_ratecard_map on tariff_ratecard_map.tariff_id = carrier.tariff
                         $sql .= " and did_status = 'USED' and reseller2_account_id = '" . $parent_account_id . "'";
                     }
                 }
-                $sql .= " and did_number like '" . $did . "%' limit 15 ";
+                $sql .= " and did_number like '" . $did . "%' limit 500 ";
                 $query = $this->db->query($sql);
                 $rows = $query->result_array();
 
@@ -863,6 +871,10 @@ INNER JOIN tariff_ratecard_map on tariff_ratecard_map.tariff_id = carrier.tariff
             return $e->getMessage();
         }
     }
+	
+	
+	
+	
 
     function destination($data) {
         try {

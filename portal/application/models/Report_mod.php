@@ -12,6 +12,12 @@
 // OV500 Version 1.0.1
 // License https://www.gnu.org/licenses/agpl-3.0.html
 //
+//
+// The Initial Developer of the Original Code is
+// Anand Kumar <kanand81@gmail.com> & Seema Anand <openvoips@gmail.com>
+// Portions created by the Initial Developer are Copyright (C)
+// the Initial Developer. All Rights Reserved.
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
 // published by the Free Software Foundation, either version 3 of the
@@ -279,8 +285,8 @@ sum(if(callstatus = 'answer',1,0)) as 'answer',
 sum(if(callstatus = 'ring',1,0)) as 'ringing',
 sum(if(callstatus = 'progress',1,0)) as 'progress'
 from livecalls where reseller1_account_id is NULL 
-group by call_flow, customer_account_id, customer_ipaddress order by customer_company ,total_calls desc ";
-
+group by call_flow, customer_account_id ,customer_ipaddress  order by customer_company ,total_calls desc ";
+// customer_ipaddress
             // $result = $DB1->query($str);
             $result = $this->db->query($str);
             $customer_calls = $result->result_array();

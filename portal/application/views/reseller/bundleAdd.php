@@ -10,8 +10,7 @@
             <h2>Reseller Account Configuration Management</h2>
             <ul class="nav navbar-right panel_toolbox">             
                 <li><a href="<?php $tab_index = 0;
-echo base_url('resellers') . '/edit/' . param_encrypt($data['account_id']);
-?>"><button class="btn btn-danger" type="button" tabindex="<?php echo $tab_index++; ?>">Back to Customer Edit Page</button></a> </li>
+echo base_url('resellers') . '/edit/' . param_encrypt($data['account_id']); ?>"><button class="btn btn-danger" type="button" tabindex="<?php echo $tab_index++; ?>">Back to Customer Edit Page</button></a> </li>
             </ul>
             <div class="clearfix"></div>
         </div>
@@ -52,13 +51,12 @@ echo base_url('resellers') . '/edit/' . param_encrypt($data['account_id']);
                             </select>
                         </div>
                     </div>
-                    <div class="form-group">
+		    <div class="form-group">
                         <label class="control-label col-md-4 col-sm-3 col-xs-12" for="first-name">Number of Packages<span class="required">*</span></label>
                         <div class="col-md-7 col-sm-6 col-xs-12">
-                            <input name="no_of_package" id="no_of_package" class="form-control col-md-7 col-xs-12" value="<?php echo set_value('no_of_package', '1'); ?>">
+                            <input name="no_of_package" id="no_of_package" class="form-control col-md-7 col-xs-12" value="<?php echo set_value('no_of_package','1'); ?>">
                         </div>
                     </div>
-
 
                     <div class="form-group">
                         <label class="control-label col-md-4 col-sm-3 col-xs-12" for="first-name">Description</label>

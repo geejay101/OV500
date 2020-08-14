@@ -11,6 +11,12 @@
 // OV500 Version 1.0.1
 // License https://www.gnu.org/licenses/agpl-3.0.html
 //
+//
+// The Initial Developer of the Original Code is
+// Anand Kumar <kanand81@gmail.com> & Seema Anand <openvoips@gmail.com>
+// Portions created by the Initial Developer are Copyright (C)
+// the Initial Developer. All Rights Reserved.
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
 // published by the Free Software Foundation, either version 3 of the
@@ -1715,6 +1721,12 @@ class APIS extends PDO {
         $this->query('SWITCH', $query);
         $this->execute();
 
+
+     $query = "DELETE  FROM livecalls where start_time <  DATE_FORMAT(DATE_SUB(NOW(), INTERVAL 1 MINUTE), '%Y-%m-%d %H:%i:00') and (callstatus = 'ring' or callstatus = 'progress');";
+        $this->writelog($query);
+        $this->query('SWITCH', $query);
+        $this->execute();
+
         $query = sprintf("SELECT id, account_id, credit_amount, execution_date, status_id FROM credit_scheduler where execution_date < NOW() and status_id = '0'");
         $this->writelog($query);
         $this->query('SWITCH', $query);
@@ -1798,3 +1810,4 @@ class APIS extends PDO {
     }
 
 }
+

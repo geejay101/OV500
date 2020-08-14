@@ -51,14 +51,12 @@ echo base_url('customers') . '/edit/' . param_encrypt($data['account_id']); ?>">
                             </select>
                         </div>
                     </div>
-
-                    <div class="form-group">
+		  <div class="form-group">
                         <label class="control-label col-md-4 col-sm-3 col-xs-12" for="first-name">Number of Packages<span class="required">*</span></label>
                         <div class="col-md-7 col-sm-6 col-xs-12">
                             <input name="no_of_package" id="no_of_package" class="form-control col-md-7 col-xs-12" value="<?php echo set_value('no_of_package','1'); ?>">
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label class="control-label col-md-4 col-sm-3 col-xs-12" for="first-name">Description</label>
                         <div class="col-md-7 col-sm-6 col-xs-12">

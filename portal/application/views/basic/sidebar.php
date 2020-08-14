@@ -11,6 +11,12 @@
 // OV500 Version 1.0.1
 // License https://www.gnu.org/licenses/agpl-3.0.html
 //
+//
+// The Initial Developer of the Original Code is
+// Anand Kumar <kanand81@gmail.com> & Seema Anand <openvoips@gmail.com>
+// Portions created by the Initial Developer are Copyright (C)
+// the Initial Developer. All Rights Reserved.
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
 // published by the Free Software Foundation, either version 3 of the
@@ -101,6 +107,14 @@
                         $menu_user .= '<li ' . $class . '><a href="' . base_url() . 'reports/CarrQOSR">Carrier QoS Summary</a></li>';
                     }
 
+                    if (check_account_permission('system', 'system_load')) {
+                        $class = '';
+                        if (in_array($page_name, array('system_load')))
+                            $class = 'class="current-page"';
+                        $menu_user .= '<li ' . $class . '><a href="' . base_url() . 'System">System Load</a></li>';
+                    }
+
+
                     if ($menu_user != '') {
                         echo '<li><a><i class="fa fa-th-large" aria-hidden="true"></i> Live System Reports<span class="fa  fa-chevron-down"></span></a> <ul class="nav child_menu">';
                         echo $menu_user;
@@ -128,16 +142,19 @@
                         $class = 'class="current-page"';
                     $menu_user .= '<li ' . $class . '><a href="' . base_url() . 'tariffs">Tariffs</a></li>';
                 }
-                
-                  if (get_logged_account_level() < 3 && check_account_permission('bundle', 'view')) {
+
+                if (get_logged_account_level() < 3 && check_account_permission('bundle', 'view')) {
                     $class = '';
                     if (in_array($page_name, array('bundle_index', 'bundle_add', 'bundle_edit')))
                         $class = 'class="current-page"';
-                    $menu_user .= '<li ' . $class . '><a href="' . base_url() . 'bundle">Bundle & Package</a></li>';
+                    $menu_user .= '<li ' . $class . '><a href="' . base_url() . 'bundle">Bundle & Pachage</a></li>';
                 }
-                
+
+
+
+
                 if ($menu_user != '') {
-                    echo '<li><a><i class="fa fa-registered"></i>Rates & Package<span class="fa fa-chevron-down"></span></a> <ul class="nav child_menu">';
+                    echo '<li><a><i class="fa fa-registered"></i>Rates & Pachage<span class="fa fa-chevron-down"></span></a> <ul class="nav child_menu">';
                     echo $menu_user;
                     echo '</ul></li>';
                 }
@@ -197,7 +214,7 @@
                     $menu_user = '';
                     if (get_logged_account_level() <= 3 && check_account_permission('customer', 'view')) {
                         $class = '';
-                        if (in_array($page_name, array('customer_index', 'customer_edit', 'customer_add', 'customer_ip_add', 'customer_ip_edit', 'customer_sip_add', 'customer_sip_edit', 'customer_editSRCNo', 'customer_dialplan_edit', 'customer_dialplan_add', 'customer_translation_rules_edit', 'account_payment_history', 'customer_editINSRCNo', 'customer_translation_rules_incoming_edit', 'cState', 'statement','customer_addBundle')))
+                        if (in_array($page_name, array('customer_index', 'customer_edit', 'customer_add', 'customer_ip_add', 'customer_ip_edit', 'customer_sip_add', 'customer_sip_edit', 'customer_editSRCNo', 'customer_dialplan_edit', 'customer_dialplan_add', 'customer_translation_rules_edit', 'account_payment_history', 'customer_editINSRCNo', 'customer_translation_rules_incoming_edit', 'cState', 'statement', 'customer_addBundle')))
                             $class = 'class="current-page"';
                         $menu_user .= '<li ' . $class . '><a href="' . base_url() . 'customers">Customers</a></li>';
                     }

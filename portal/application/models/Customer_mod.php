@@ -12,6 +12,12 @@
 // OV500 Version 1.0.1
 // License https://www.gnu.org/licenses/agpl-3.0.html
 //
+//
+// The Initial Developer of the Original Code is
+// Anand Kumar <kanand81@gmail.com> & Seema Anand <openvoips@gmail.com>
+// Portions created by the Initial Developer are Copyright (C)
+// the Initial Developer. All Rights Reserved.
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
 // published by the Free Software Foundation, either version 3 of the
@@ -642,6 +648,22 @@ class Customer_mod extends CI_Model {
                 throw new Exception($error_array['message']);
             }
             $log_data_array[] = array('activity_type' => 'add', 'sql_table' => 'customer_balance', 'sql_key' => $key, 'sql_query' => $str);
+
+
+            $sdr_data_array['rule_type'] = 'OPENINGBALANCE';
+            $sdr_data_array['yearmonth'] = date('Ym');
+            $sdr_data_array['account_id'] = $key;
+            $sdr_data_array['action_date'] = date("Y-m-d H:i:s");
+            $sdr_data_array['actiondate'] = date("Y-m-d H:i:s");
+            $sdr_data_array['service_startdate'] = date("Y-m-d H:i:s");
+            $sdr_data_array['service_stopdate'] = date("Y-m-d H:i:s");
+            $str = $this->db->insert_string('customer_sdr', $sdr_data_array);
+            $result = $this->db->query($str);
+            if (!$result) {
+                $error_array = $this->db->error();
+                throw new Exception($error_array['message']);
+            }
+            $log_data_array[] = array('activity_type' => 'add', 'sql_table' => 'customer_sdr', 'sql_key' => $key, 'sql_query' => $str);
 
             if ($this->db->trans_status() === FALSE) {
                 $error_array = $this->db->error();
@@ -2272,7 +2294,7 @@ class Customer_mod extends CI_Model {
             $api_request['service_number'] = $bundle_data_array['bundle_package_id'];
             $api_request['request'] = 'BUNDLECHARGES';
             $api_response = callSdrAPI($api_request);
-            $api_result = json_decode($api_response, true);       
+            $api_result = json_decode($api_response, true);
             $api_log_data_array[] = array('activity_type' => 'SDRAPI', 'sql_table' => $api_request['request'], 'sql_key' => $api_request['account_id'], 'sql_query' => print_r($api_request, true));
 
             if (!isset($api_result['error']) || $api_result['error'] == '1') {

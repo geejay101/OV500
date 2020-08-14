@@ -11,6 +11,12 @@
 // OV500 Version 1.0.1
 // License https://www.gnu.org/licenses/agpl-3.0.html
 //
+//
+// The Initial Developer of the Original Code is
+// Anand Kumar <kanand81@gmail.com> & Seema Anand <openvoips@gmail.com>
+// Portions created by the Initial Developer are Copyright (C)
+// the Initial Developer. All Rights Reserved.
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
 // published by the Free Software Foundation, either version 3 of the
@@ -32,9 +38,9 @@
 <!-- jQuery Sparklines -->
 <script src="<?php echo base_url() ?>theme/vendors/jquery-sparkline/dist/jquery.sparkline.min.js"></script>
 <style type="text/css">
-    .red1{background-color:#AA0000;color: #c10d1e;}/*FF3535*/
+    .red1{background-color:#FE6363;color: #e60c0c;}/*FF3535*/
     .red2{background-color:#FE6363;color: #e60c0c;}
-    .red3{background-color:#FEA7A7;color:#F0F3F4;}
+    .red3{background-color:#FEA7A7;color:##557A86;}
     .red4{background-color:#FFDFDF;}  
 </style>         
 

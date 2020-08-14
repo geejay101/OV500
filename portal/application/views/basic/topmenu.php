@@ -1,30 +1,4 @@
-<!--
-// ##############################################################################
-// OV500 - Open Source SIP Switch & Pre-Paid & Post-Paid VoIP Billing Solution
-//
-// Copyright (C) 2019-2020 Chinna Technologies   
-// Seema Anand <openvoips@gmail.com>
-// Anand <kanand81@gmail.com>
-// http://www.openvoips.com  http://www.openvoips.org
-//
-//
-// OV500 Version 1.0.1
-// License https://www.gnu.org/licenses/agpl-3.0.html
-//
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU Affero General Public License as
-// published by the Free Software Foundation, either version 3 of the
-// License, or (at your option) any later version.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-// GNU Affero General Public License for more details.
-//
-// You should have received a copy of the GNU Affero General Public License
-// along with this program. If not, see <http://www.gnu.org/licenses/>.
-// ##############################################################################
--->
+
 <?php
 $current_timestamp = time() * 1000;
 ?>
@@ -38,16 +12,16 @@ $current_timestamp = time() * 1000;
     {
         current_timestamp = current_timestamp + interval_time;
 
-//		var time=moment(current_timestamp).tz("GMT").utcOffset("+05:30").format('hh:mm A');
-        var time = moment().tz("Europe/London").format('hh:mm A');
-        //var time=moment(current_timestamp).tz("BST").format('hh:mm A');			
+
+        var time = moment().tz("GMT").format('hh:mm A');
+        //var time=moment(current_timestamp).tz("GMT").format('hh:mm A');			
         $('#id_clock').html('Server Time: ' + time);
         //console.log(time);
     }
 
     $(document).ready(function () {
-        //showTime();	
-        //setInterval(showTime, interval_time);
+        showTime();	
+        setInterval(showTime, interval_time);
     });
 </script> 
 

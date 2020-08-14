@@ -11,6 +11,12 @@
 // OV500 Version 1.0.1
 // License https://www.gnu.org/licenses/agpl-3.0.html
 //
+//
+// The Initial Developer of the Original Code is
+// Anand Kumar <kanand81@gmail.com> & Seema Anand <openvoips@gmail.com>
+// Portions created by the Initial Developer are Copyright (C)
+// the Initial Developer. All Rights Reserved.
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
 // published by the Free Software Foundation, either version 3 of the
@@ -528,9 +534,6 @@ class OVS extends PDO {
 
         $query = sprintf("SELECT tariff.tariff_status, tariff_ratecard_map.id, tariff_ratecard_map.ratecard_id, tariff_ratecard_map.tariff_id, tariff_ratecard_map.start_day, tariff_ratecard_map.end_day, tariff_ratecard_map.start_time, tariff_ratecard_map.end_time, carrier_rates.prefix, carrier_rates.destination, carrier_rates.rate, carrier_rates.connection_charge, carrier_rates.minimal_time, carrier_rates.resolution_time, carrier_rates.grace_period, carrier_rates.rate_multiplier, carrier_rates.rate_addition, carrier_rates.rates_status, tariff.tariff_currency_id, tariff.tariff_currency_id FROM tariff_ratecard_map  INNER JOIN carrier_rates on carrier_rates.ratecard_id = tariff_ratecard_map.ratecard_id    INNER JOIN ratecard on carrier_rates.ratecard_id = ratecard.ratecard_id and ratecard.ratecard_for = 'INCOMING' INNER JOIN tariff on  tariff.tariff_id = tariff_ratecard_map.tariff_id where WEEKDAY(CURDATE()) BETWEEN start_day and end_day AND CURTIME() BETWEEN start_time and end_time and tariff_ratecard_map.tariff_id = '%s'  and (%s) ORDER BY priority asc, prefix desc, rate ASC, end_time ASC limit 1;", $this->carrierdata['tariff_id'], $str);
 
-
-
-
         $this->writelog($query);
         $this->query('SWITCH', $query);
         $rs = $this->resultset();
@@ -584,8 +587,6 @@ class OVS extends PDO {
         $this->carrierdata['dst_caller'] = $this->caller_number;
         $this->carrierdata['dst_callee'] = $this->carrierdata['dst_destination'];
 
-
-
         $route['rate'] = $this->carrierdata['rate'];
         $route['connection_charge'] = $this->carrierdata['connection_charge'];
         $route['tariff_currency_id'] = $this->carrierdata['tariff_currency_id'];
@@ -627,10 +628,6 @@ class OVS extends PDO {
         }
         $this->Gateway_XML_incoming .= "\n <action application=\"set\" data=\"sip_h_X-CARRIERID=DIDGATEWAY\"/>";
         $this->Gateway_XML_incoming .= "\n <action application=\"set\" data=\"sip_h_X-CARRIERCPS=5000\"/>";
-
-
-
-
 
         if ($this->carrierdata['dst_type'] == 'IP') {
             $this->Gateway_XML_incoming .= "\n <action application=\"set\" data=\"sip_h_X-DSTURI=sip:" . $this->incomingcarrierdst . "@" . $this->carrierdata['dst_destination'] . "\"/>";
@@ -691,6 +688,11 @@ class OVS extends PDO {
                     
                 }
             }
+        }
+
+
+	if ($this->carrierdata['dst_type1'] != 'PSTN' or $this->carrierdata['dst_type2'] != 'PSTN') {
+            $this->livecalls_in();
         }
 
         $this->Gateway_XML = $this->Gateway_XML_incoming;
@@ -3050,7 +3052,7 @@ class OVS extends PDO {
                     } else {
                         $this->Gateway_XML .= "\n<action application=\"set\" data=\"continue_on_fail=TRUE\"/>";
                     }
-                    if ($this->customers['media_transcoding'] == '1') {
+                    if ($this->customers['account_media_rtpproxy_transcoding'] == '1') {
                         $this->Gateway_XML .= "\n <action application=\"set\" data=\"sip_h_X-MEDIATRA=1\"/>";
                         $this->Gateway_XML .= "\n <action application=\"export\" data=\"sip_h_X-MEDIATRA=1\"/>";
                         $this->Gateway_XML .= "\n<action application=\"set\" data=\"bypass_media=false\"/>";
@@ -3776,6 +3778,73 @@ class OVS extends PDO {
 
 
         RETURN $responce;
+    }
+
+function livecalls_in() {
+        if ($this->status != 'FAIL') {
+            if (count($this->customersdata) > 0) {
+                foreach ($this->customersdata as $userkey => $uservalue) {
+                    if ($userkey == 'user') {
+                        foreach ($uservalue as $key => $value) {
+                            if ($key == 'account_id' or $key == 'tariff_id' or $key == 'customer_currency_id' or $key == 'ipaddress' or $key == 'ratecard_id' or $key == 'prefix' or $key == 'destination' or $key == 'rate' or $key == 'src_caller' or $key == 'src_callee' or $key == 'src_ip') {
+                                $data = $data . "customer_$key = '" . addslashes($value) . "',";
+                            } elseif ($key == 'company_name') {
+                                $data = $data . "customer_company = '" . addslashes($value) . "',";
+                            }
+                        }
+                    }
+                    if ($userkey == 'Reseller1') {
+                        foreach ($uservalue as $key => $value) {
+                            if ($key == 'account_id' or $key == 'tariff_id' or $key == 'ratecard_id' or $key == 'prefix' or $key == 'destination' or $key == 'rate') {
+                                $data = $data . "reseller1_$key = '" . addslashes($value) . "',";
+                            }
+                        }
+                    }
+                    if ($userkey == 'Reseller2') {
+                        foreach ($uservalue as $key => $value) {
+                            if ($key == 'account_id' or $key == 'tariff_id' or $key == 'ratecard_id' or $key == 'prefix' or $key == 'destination' or $key == 'rate') {
+                                $data = $data . "reseller2_$key = '" . addslashes($value) . "',";
+                            }
+                        }
+                    }
+                    if ($userkey == 'Reseller3') {
+                        foreach ($uservalue as $key => $value) {
+                            if ($key == 'account_id' or $key == 'tariff_id' or $key == 'ratecard_id' or $key == 'prefix' or $key == 'destination' or $key == 'rate') {
+                                $data = $data . "reseller3_$key = '" . addslashes($value) . "',";
+                            }
+                        }
+                    }
+                }
+
+                foreach ($this->route22 as $key => $value) {
+
+                    if ($key == 'carrier_id' or $key == 'carrier_name' or $key == 'carrier_currency_id')
+                        $data = $data . "$key='" . addslashes($value) . "',";
+
+                    if ($key == 'ratecard_id' or $key == 'tariff_id' or $key == 'prefix' or $key == 'destination' or $key == 'rate' or $key == 'src_caller' or $key == 'src_callee' or $key == 'dst_caller' or $key == 'dst_callee') {
+                        $data = $data . "carrier_$key = '" . addslashes($value) . "',";
+                    }
+                    if ($key == 'ipaddress')
+                        $data = $data . "carrier_ipaddress='" . addslashes($value) . "',";
+                    if ($key == 'ipaddress_name')
+                        $data = $data . "carrier_ipaddress_name='" . addslashes($value) . "',";
+                }
+
+                $data = $data . "dialplan_id = '" . addslashes($this->dialplan_id) . "',";
+                $data = $data . "common_uuid = '" . addslashes($this->uuid) . "',";
+                $data = $data . "start_time= '" . addslashes($this->request['Event-Date-Local']) . "',";
+                $data = $data . "fs_host= '" . addslashes($this->request['FreeSWITCH-IPv4']) . "',";
+                $data = $data . "loadbalancer= '" . trim($this->Hunt_Network_Addr) . "',";
+                $data = $data . "callstatus='progress'";
+
+                $livecalldata = rtrim($data, ',');
+                $query = "insert into livecalls  set " . $livecalldata;
+                $this->writelog($query);
+                $this->query('SWITCH', $query);
+                $this->execute();
+                $this->route22 = Array();
+            }
+        }
     }
 
     function livecalls() {
@@ -4690,7 +4759,7 @@ class OVS extends PDO {
                                 $sub_used = $data_b['total_allowed'] - $data_b['sdr_consumption'];
                                 $b_value = $b_value - $sub_used;
                             }
-                            $query = sprintf("update customer_bundle_sdr  set sdr_consumption =  sdr_consumption + %s where id = '%s'", $sub_used / 60, $data_b['id']);
+                            $query = sprintf("update customer_bundle_sdr  set sdr_consumption =  sdr_consumption + %s where id = '%s'", $sub_used/60, $data_b['id']);
                             $this->writelog($query);
                             $this->query('SWITCH', $query);
                             $this->execute();
@@ -4715,7 +4784,7 @@ class OVS extends PDO {
                 $reseller1_callcost_total_org = $reseller1_callcost_total;
                 if ($this->reseller1_data['bundle_type'] == 'MINUTE') {
                     if ($reseller1_duartion <= $this->reseller1_data['bundle_value'] * 60) {
-                        $b_value = ceil($reseller1_duartion);
+                        $b_value = ceil($reseller1_duartion );
                         $reseller1_callcost_total = 0;
                     } else {
                         $b_value = $this->reseller1_data['bundle_value'];
@@ -4749,7 +4818,7 @@ class OVS extends PDO {
                                 $sub_used = $data_b['total_allowed'] - $data_b['sdr_consumption'];
                                 $b_value = $b_value - $sub_used;
                             }
-                            $query = sprintf("update customer_bundle_sdr  set sdr_consumption =  sdr_consumption + %s where id = '%s'", $sub_used / 60, $data_b['id']);
+                            $query = sprintf("update customer_bundle_sdr  set sdr_consumption =  sdr_consumption + %s where id = '%s'", $sub_used/60, $data_b['id']);
                             $this->writelog($query);
                             $this->query('SWITCH', $query);
                             $this->execute();
@@ -4814,7 +4883,7 @@ class OVS extends PDO {
                                 $sub_used = $data_b['total_allowed'] - $data_b['sdr_consumption'];
                                 $b_value = $b_value - $sub_used;
                             }
-                            $query = sprintf("update customer_bundle_sdr  set sdr_consumption =  sdr_consumption + %s where id = '%s'", $sub_used / 60, $data_b['id']);
+                            $query = sprintf("update customer_bundle_sdr  set sdr_consumption =  sdr_consumption + %s where id = '%s'", $sub_used/60, $data_b['id']);
                             $this->writelog($query);
                             $this->query('SWITCH', $query);
                             $this->execute();
@@ -5681,3 +5750,4 @@ KEY billsec (billsec) USING BTREE
     }
 
 }
+

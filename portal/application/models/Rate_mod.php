@@ -12,6 +12,12 @@
 // OV500 Version 1.0.1
 // License https://www.gnu.org/licenses/agpl-3.0.html
 //
+//
+// The Initial Developer of the Original Code is
+// Anand Kumar <kanand81@gmail.com> & Seema Anand <openvoips@gmail.com>
+// Portions created by the Initial Developer are Copyright (C)
+// the Initial Developer. All Rights Reserved.
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
 // published by the Free Software Foundation, either version 3 of the
@@ -318,8 +324,8 @@ class Rate_mod extends CI_Model {
                     }
                 }
             }
-            $this->db->order_by('prefix', 'ASC');
-           
+            // $this->db->order_by('prefix', 'ASC');
+           $this->db->order_by('id', 'DESC');
             $this->db->limit(intval($limit_from), intval($limit_to));
             $q = $this->db->get($rate_table_name);
 

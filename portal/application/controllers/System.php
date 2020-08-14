@@ -7,8 +7,10 @@
 // Anand <kanand81@gmail.com>
 // http://www.openvoips.com  http://www.openvoips.org
 //
+//
 // OV500 Version 1.0.1
 // License https://www.gnu.org/licenses/agpl-3.0.html
+//
 //
 // The Initial Developer of the Original Code is
 // Anand Kumar <kanand81@gmail.com> & Seema Anand <openvoips@gmail.com>
@@ -29,10 +31,34 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ##############################################################################
 
-$data = $_REQUEST;
-include_once 'config.php';
-include_once 'lib/OVS.php';
-$API = New OVS();
-$API->writelog(json_encode($data));
-$API->api($data);
-?>
+if (!defined('BASEPATH'))
+    exit('No direct script access allowed');
+
+class System extends CI_Controller {
+
+    function __construct() {
+        parent::__construct();
+
+        if (!check_is_loggedin())
+            redirect(base_url(), 'refresh');
+        //$this->output->enable_profiler(ENABLE_PROFILE);
+    }
+
+    public function index() {
+        $page_name = "server_load";
+        $data['page_name'] = $page_name;
+        $data['sitesetup_data'] = $this->sitesetup_mod->get_sitesetup_data();
+
+        $account_id = get_logged_account_id();
+        $this->load->model('System_mod');
+
+        $data['proxy_data'] = $this->System_mod->get_proxy_server_data();
+        $data['switch_data'] = $this->System_mod->get_switch_server_data();
+        $data['proxy_switch_data'] = $this->System_mod->get_proxy_switch_server_data();
+        $data['customer_calls_data'] = $this->System_mod->get_proxy_customer_calls_data();
+        $this->load->view('basic/header', $data);
+        $this->load->view('system/system_load');
+        $this->load->view('basic/footer', $data);
+    }
+
+}
