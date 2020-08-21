@@ -1098,6 +1098,7 @@ CREATE TABLE `livecalls` (
   `notes` text,
   `customer_company` varchar(150) DEFAULT NULL,
   `loadbalancer` varchar(30) DEFAULT NULL,
+  `call_flow` enum('PSTN','DID') DEFAULT 'PSTN',
   PRIMARY KEY (`id`),
   KEY `carrier_destination` (`carrier_destination`) USING BTREE,
   KEY `carrier_gateway_ipaddress` (`carrier_ipaddress`) USING BTREE,
