@@ -1567,15 +1567,15 @@ class APIS extends PDO {
             $cost = 0;
             $customer_statistics = date('Ym', strtotime($date)) . "_customerstate";
             if ($usertype == 'CUSTOMER') {
-                $query = sprintf("SELECT sum(customer_cost) cost FROM 201909_customerstate where account_id = '%s' and CURDATE() = call_date;", $customer_statistics, $account_id);
+                $query = sprintf("SELECT sum(customer_cost) cost FROM %s where account_id = '%s' and CURDATE() = call_date;", $customer_statistics, $account_id);
             } elseif ($usertype == 'RESELLER1') {
-                $query = sprintf("SELECT sum(r1_cost) cost FROM 201909_customerstate where r1_account_id = '%s' and CURDATE() = call_date;", $customer_statistics, $account_id);
+                $query = sprintf("SELECT sum(r1_cost) cost FROM %s where r1_account_id = '%s' and CURDATE() = call_date;", $customer_statistics, $account_id);
             } elseif ($usertype == 'RESELLER2') {
-                $query = sprintf("SELECT sum(r2_cost) cost FROM 201909_customerstate where r2_account_id = '%s' and CURDATE() = call_date;", $customer_statistics, $account_id);
+                $query = sprintf("SELECT sum(r2_cost) cost FROM %s where r2_account_id = '%s' and CURDATE() = call_date;", $customer_statistics, $account_id);
             } elseif ($usertype == 'RESELLER3') {
-                $query = sprintf("SELECT sum(r3_cost) cost FROM 201909_customerstate where r2_account_id = '%s' and CURDATE() = call_date;", $customer_statistics, $account_id);
+                $query = sprintf("SELECT sum(r3_cost) cost FROM %s where r2_account_id = '%s' and CURDATE() = call_date;", $customer_statistics, $account_id);
             } else {
-                $query = sprintf("SELECT sum(customer_cost) cost FROM 201909_customerstate where account_id = '%s' and CURDATE() = call_date;", $customer_statistics, $account_id);
+                $query = sprintf("SELECT sum(customer_cost) cost FROM %s where account_id = '%s' and CURDATE() = call_date;", $customer_statistics, $account_id);
             }
             $this->writelog($query);
             $this->query('CDR', $query);
