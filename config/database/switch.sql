@@ -1,17 +1,27 @@
-/*
-Source Server         : localhost
-Source Server Version : 50560
-Source Host           : localhost
-Source Database       : switch
-Date: 2019-08-20 09:58:53
-*/
+-- MySQL dump 10.14  Distrib 5.5.65-MariaDB, for Linux (x86_64)
+--
+-- Host: localhost    Database: switch
+-- ------------------------------------------------------
+-- Server version	5.5.65-MariaDB
 
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `account`
+--
 SET FOREIGN_KEY_CHECKS=0;
-
--- ----------------------------
--- Table structure for `account`
--- ----------------------------
 DROP TABLE IF EXISTS `account`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `account` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `account_id` varchar(30) DEFAULT NULL,
@@ -43,10 +53,26 @@ CREATE TABLE `account` (
   `update_dt` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `key_account_id` (`account_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- ----------------------------
+--
+-- Dumping data for table `account`
+--
+
+LOCK TABLES `account` WRITE;
+/*!40000 ALTER TABLE `account` DISABLE KEYS */;
+INSERT INTO `account` VALUES (1,'IS000002489','1','CUSTOMER',NULL,'',4,'DEMOCUST32',1,1,'',0.00,0.00,0.00,'exclusive','NONE',1,'1','1','1','G729,PCMU,PCMA,G722','0','1','0','0',120,'CEIL',NULL);
+/*!40000 ALTER TABLE `account` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `account_card_details`
+--
+
 DROP TABLE IF EXISTS `account_card_details`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `account_card_details` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `account_id` varchar(30) NOT NULL,
@@ -55,8 +81,24 @@ CREATE TABLE `account_card_details` (
   `dt_updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `account_card_details`
+--
+
+LOCK TABLES `account_card_details` WRITE;
+/*!40000 ALTER TABLE `account_card_details` DISABLE KEYS */;
+/*!40000 ALTER TABLE `account_card_details` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `account_payment_credentials`
+--
 
 DROP TABLE IF EXISTS `account_payment_credentials`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `account_payment_credentials` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `account_id` varchar(30) NOT NULL,
@@ -64,10 +106,25 @@ CREATE TABLE `account_payment_credentials` (
   `credentials` text NOT NULL,
   `status` enum('Y','N') NOT NULL DEFAULT 'Y',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
--- Table structure for `activity_api_log`
--- ----------------------------
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `account_payment_credentials`
+--
+
+LOCK TABLES `account_payment_credentials` WRITE;
+/*!40000 ALTER TABLE `account_payment_credentials` DISABLE KEYS */;
+/*!40000 ALTER TABLE `account_payment_credentials` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `activity_api_log`
+--
+
 DROP TABLE IF EXISTS `activity_api_log`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `activity_api_log` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `request_data` text NOT NULL,
@@ -75,12 +132,26 @@ CREATE TABLE `activity_api_log` (
   `function_return` text NOT NULL,
   `create_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- ----------------------------
--- Table structure for `activity_log`
--- ----------------------------
+--
+-- Dumping data for table `activity_api_log`
+--
+
+LOCK TABLES `activity_api_log` WRITE;
+/*!40000 ALTER TABLE `activity_api_log` DISABLE KEYS */;
+INSERT INTO `activity_api_log` VALUES (1,'{\"account_id\":\"IS000002489\",\"user_type\":null,\"service_number\":\"Temporary Credits\",\"amount\":\"1\",\"paid_on\":\"2020-08-23 07:48:50\",\"notes\":\" (approved by Anand)\",\"created_by\":\"ADSW000001\",\"request\":\"ADDCREDIT\",\"schedulertime\":\"12\"}','{\"status\":\"SUCCESS\",\"message\":\"Added successfully\",\"error\":0}','{\"status\":\"SUCCESS\",\"message\":\"Added successfully\",\"error\":0}','2020-08-23 07:49:14'),(2,'{\"account_id\":\"IS000002489\",\"user_type\":null,\"service_number\":\"Temporary Credits\",\"amount\":\"1\",\"paid_on\":\"2020-08-23 07:48:50\",\"notes\":\" (approved by Anand)\",\"created_by\":\"ADSW000001\",\"request\":\"ADDCREDIT\",\"schedulertime\":\"12\"}','{\"status\":\"SUCCESS\",\"message\":\"Added successfully\",\"error\":0}','{\"status\":\"SUCCESS\",\"message\":\"Added successfully\",\"error\":0}','2020-08-23 07:49:14');
+/*!40000 ALTER TABLE `activity_api_log` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `activity_log`
+--
+
 DROP TABLE IF EXISTS `activity_log`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `activity_log` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `activity_id` int(11) NOT NULL,
@@ -91,12 +162,26 @@ CREATE TABLE `activity_log` (
   `account_id` varchar(30) NOT NULL,
   `dt_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- ----------------------------
--- Table structure for `autosystem_report_tmp`
--- ----------------------------
+--
+-- Dumping data for table `activity_log`
+--
+
+LOCK TABLES `activity_log` WRITE;
+/*!40000 ALTER TABLE `activity_log` DISABLE KEYS */;
+INSERT INTO `activity_log` VALUES (1,1,'insert','tariff','','INSERT INTO `tariff` (`tariff_name`, `tariff_type`, `tariff_currency_id`, `tariff_description`, `tariff_status`, `tariff_id`, `created_by`, `create_dt`, `update_dt`) VALUES (\'demoCustomer\', \'CUSTOMER\', \'1\', \'\', \'1\', \'DEMOCUST32\', \'ADSW000001\', \'2020-08-22 22:43:08\', \'2020-08-22 22:43:08\')','ADSW000001','2020-08-23 05:43:08'),(2,2,'insert','tariff','','INSERT INTO `tariff` (`tariff_name`, `tariff_type`, `tariff_currency_id`, `tariff_description`, `tariff_status`, `tariff_id`, `created_by`, `create_dt`, `update_dt`) VALUES (\'demoCarrier\', \'CARRIER\', \'1\', \'\', \'1\', \'DEMOCARR41\', \'ADSW000001\', \'2020-08-22 22:44:00\', \'2020-08-22 22:44:00\')','ADSW000001','2020-08-23 05:44:00'),(3,3,'insert','ratecard','','INSERT INTO `ratecard` (`ratecard_name`, `ratecard_currency_id`, `ratecard_type`, `created_by`, `ratecard_id`, `ratecard_for`) VALUES (\'demoCustomer\', \'1\', \'CUSTOMER\', \'ADSW000001\', \'DEMOCUST43\', \'OUTGOING\')','ADSW000001','2020-08-23 05:45:09'),(4,4,'insert','ratecard','','INSERT INTO `ratecard` (`ratecard_name`, `ratecard_currency_id`, `ratecard_type`, `created_by`, `ratecard_id`, `ratecard_for`) VALUES (\'demoCarrier\', \'1\', \'CARRIER\', \'ADSW000001\', \'DEMOCARR47\', \'OUTGOING\')','ADSW000001','2020-08-23 06:36:43'),(5,5,'insert','tariff_ratecard_map','','INSERT INTO `tariff_ratecard_map` (`ratecard_id`, `tariff_id`, `start_day`, `start_time`, `end_day`, `end_time`, `priority`, `status`, `ratecard_for`) VALUES (\'DEMOCARR47\', \'DEMOCARR41\', \'0\', \'00:00:00\', \'6\', \'23:59:59\', \'1\', \'1\', \'OUTGOING\')','ADSW000001','2020-08-23 06:36:57'),(6,6,'insert','tariff_ratecard_map','','INSERT INTO `tariff_ratecard_map` (`ratecard_id`, `tariff_id`, `start_day`, `start_time`, `end_day`, `end_time`, `priority`, `status`, `ratecard_for`) VALUES (\'DEMOCUST43\', \'DEMOCUST32\', \'0\', \'00:00:00\', \'6\', \'23:59:59\', \'1\', \'1\', \'OUTGOING\')','ADSW000001','2020-08-23 06:37:09'),(7,7,'insert','carrier_rates','','INSERT INTO `carrier_rates` (`ratecard_id`, `prefix`, `destination`, `rate`, `connection_charge`, `minimal_time`, `resolution_time`, `grace_period`, `rate_multiplier`, `rate_addition`, `rates_status`, `rental`, `setup_charge`, `inclusive_channel`, `exclusive_per_channel_rental`, `create_dt`, `update_dt`) VALUES (\'DEMOCARR47\', \'1\', \'USA\', \'0.0003\', \'0.000000\', \'1\', \'1\', \'0\', \'1.00\', \'0.00\', \'1\', \'0.00\', \'0.00\', \'1\', \'0.000000\', \'2020-08-22 23:37:29\', \'2020-08-22 23:37:29\')','ADSW000001','2020-08-23 06:37:29'),(8,8,'insert','customer_rates','','INSERT INTO `customer_rates` (`ratecard_id`, `prefix`, `destination`, `rate`, `connection_charge`, `minimal_time`, `resolution_time`, `grace_period`, `rate_multiplier`, `rate_addition`, `rates_status`, `rental`, `setup_charge`, `inclusive_channel`, `exclusive_per_channel_rental`, `create_dt`, `update_dt`) VALUES (\'DEMOCUST43\', \'1\', \'USA\', \'0.00031\', \'0.000000\', \'1\', \'1\', \'0\', \'1.00\', \'0.00\', \'1\', \'0.00\', \'0.00\', \'1\', \'0.000000\', \'2020-08-22 23:37:47\', \'2020-08-22 23:37:47\')','ADSW000001','2020-08-23 06:37:47'),(9,9,'add','providers','DEMO351','INSERT INTO `providers` (`provider_name`, `currency_id`, `provider_address`, `provider_emailid`, `created_by`, `create_date`, `provider_id`) VALUES (\'demo\', \'1\', \'\', \'\', \'ADSW000001\', \'2020-08-22 23:38:26\', \'DEMO351\')','ADSW000001','2020-08-23 06:38:26'),(10,10,'add','carrier','DEMO52','INSERT INTO `carrier` (`carrier_id`, `carrier_name`, `carrier_cc`, `carrier_cps`, `dp`, `carrier_currency_id`, `tariff_id`, `carrier_progress_timeout`, `carrier_ring_timeout`, `carrier_status`, `cli_prefer`, `provider_id`, `carrier_type`, `carrier_codecs`, `vat_flag`, `tax_type`, `tax1`, `tax2`, `tax3`) VALUES (\'DEMO52\', \'demo\', \'10\', \'2\', \'4\', \'1\', \'DEMOCARR41\', \'5\', \'60\', \'1\', \'pid\', \'DEMO351\', \'OUTBOUND\', \'G729,PCMU,PCMA,G722\', \'NONE\', \'exclusive\', \'0.0\', \'0.0\', \'0.0\')','ADSW000001','2020-08-23 06:38:55'),(11,10,'add','carrier_callerid','DEMO52','INSERT INTO `carrier_callerid` (`carrier_id`, `display_string`, `maching_string`, `remove_string`, `add_string`, `route`, `action_type`) VALUES (\'DEMO52\', \'%=>%\', \'%\', \'\', \'%\', \'OUTBOUND\', \'1\')','ADSW000001','2020-08-23 06:38:55'),(12,10,'add','carrier_callerid','DEMO52','INSERT INTO `carrier_callerid` (`carrier_id`, `display_string`, `maching_string`, `remove_string`, `add_string`, `route`, `action_type`) VALUES (\'DEMO52\', \'%=>%\', \'%\', \'\', \'%\', \'INBOUND\', \'1\')','ADSW000001','2020-08-23 06:38:55'),(13,10,'add','carrier_prefix','DEMO52','INSERT INTO `carrier_prefix` (`carrier_id`, `display_string`, `maching_string`, `remove_string`, `route`, `add_string`) VALUES (\'DEMO52\', \'%=>%\', \'%\', \'\', \'OUTBOUND\', \'%\')','ADSW000001','2020-08-23 06:38:55'),(14,10,'add','carrier_prefix','DEMO52','INSERT INTO `carrier_prefix` (`carrier_id`, `display_string`, `maching_string`, `remove_string`, `route`, `add_string`) VALUES (\'DEMO52\', \'%=>%\', \'%\', \'\', \'INBOUND\', \'%\')','ADSW000001','2020-08-23 06:38:55'),(15,11,'insert','carrier_ips','','INSERT INTO `carrier_ips` (`carrier_id`, `ip_status`, `ipaddress_name`, `ipaddress`, `auth_type`, `load_share`, `passwd`, `username`, `carrier_ip_id`) VALUES (\'DEMO52\', \'1\', \'Demogateway\', \'10.10.10.10\', \'IP\', \'100\', \'\', \'\', \'DEMOGATEWAY1598164755\')','ADSW000001','2020-08-23 06:39:15'),(16,12,'insert','dialplan','','INSERT INTO `dialplan` (`dialplan_id`, `dialplan_name`, `dialplan_description`, `failover_sipcause_list`, `dialplan_status`, `update_dt`, `create_dt`) VALUES (\'DEMOROUT37\', \'DemoRoute\', \'\', \'\', \'1\', \'2020-08-22 23:39:37\', \'2020-08-22 23:39:37\')','ADSW000001','2020-08-23 06:39:37'),(17,13,'insert','dialplan_prefix_list','','INSERT INTO `dialplan_prefix_list` (`dial_prefix`, `dialplan_id`, `carrier_id`, `priority`, `start_day`, `start_time`, `end_day`, `end_time`, `load_share`, `route_status`, `create_dt`, `update_dt`) VALUES (\'1\', \'DEMOROUT37\', \'DEMO52\', \'1\', \'0\', \'00:00:00\', \'6\', \'23:59:59\', \'100\', \'1\', \'2020-08-22 23:39:45\', \'2020-08-22 23:39:45\') ON DUPLICATE KEY UPDATE dial_prefix=\'1\',dialplan_id=\'DEMOROUT37\',carrier_id=\'DEMO52\',priority=\'1\',start_day=\'0\',start_time=\'00:00:00\',end_day=\'6\',end_time=\'23:59:59\',load_share=\'100\',route_status=\'1\',create_dt=\'2020-08-22 23:39:45\',update_dt=\'2020-08-22 23:39:45\'','ADSW000001','2020-08-23 06:39:45'),(18,14,'add','account','IS000002489','INSERT INTO `account` (`account_id`, `account_type`, `dp`, `tariff_id`, `account_cc`, `account_cps`, `tax_type`, `tax1`, `tax2`, `tax3`, `currency_id`, `account_status`, `force_dst_src_cli_prefix`, `codecs_force`, `media_transcoding`, `media_rtpproxy`, `account_codecs`, `tax_number`, `vat_flag`, `parent_account_id`, `max_callduration`) VALUES (\'IS000002489\', \'CUSTOMER\', \'4\', \'DEMOCUST32\', \'1\', \'1\', \'exclusive\', \'0.0\', \'0.0\', \'0.0\', \'1\', \'1\', \'0\', \'0\', \'0\', \'1\', \'G729,PCMU,PCMA,G722\', \'\', \'NONE\', \'\', \'120\')','ADSW000001','2020-08-23 06:40:58'),(19,14,'add','customers','','INSERT INTO `customers` (`account_id`, `name`, `address`, `country_id`, `phone`, `emailaddress`, `account_type`, `company_name`, `billing_type`, `billing_cycle`, `payment_terms`, `next_billing_date`, `pincode`, `state_code_id`, `created_by`, `create_dt`) VALUES (\'IS000002489\', \'Demo\', \'\', \'\', \'\', \'demo@democompany.com\', \'CUSTOMER\', \'Demo Company\', \'prepaid\', \'monthly\', \'1\', \'2020-09-01\', \'\', \'\', \'ADSW000001\', \'2020-08-22 23:40:58\')','ADSW000001','2020-08-23 06:40:58'),(20,14,'add','web_access','','INSERT INTO `web_access` (`username`, `secret`, `customer_id`) VALUES (\'DemoCustomer\', \'Demo@Customer123\', \'2\')','ADSW000001','2020-08-23 06:40:58'),(21,14,'add','customer_callerid','IS000002489','INSERT INTO `customer_callerid` (`account_id`, `display_string`, `maching_string`, `remove_string`, `add_string`, `action_type`, `route`) VALUES (\'IS000002489\', \'%=>%\', \'%\', \'\', \'%\', \'1\', \'INBOUND\')','ADSW000001','2020-08-23 06:40:58'),(22,14,'add','customer_callerid','IS000002489','INSERT INTO `customer_callerid` (`account_id`, `display_string`, `maching_string`, `remove_string`, `add_string`, `action_type`, `route`) VALUES (\'IS000002489\', \'%=>%\', \'%\', \'\', \'%\', \'1\', \'OUTBOUND\')','ADSW000001','2020-08-23 06:40:58'),(23,14,'add','customer_dialpattern','IS000002489','INSERT INTO `customer_dialpattern` (`account_id`, `display_string`, `maching_string`, `remove_string`, `add_string`, `route`) VALUES (\'IS000002489\', \'%=>%\', \'%\', \'\', \'%\', \'OUTBOUND\')','ADSW000001','2020-08-23 06:40:58'),(24,14,'add','customer_dialpattern','IS000002489','INSERT INTO `customer_dialpattern` (`account_id`, `display_string`, `maching_string`, `remove_string`, `add_string`, `route`) VALUES (\'IS000002489\', \'%=>%\', \'%\', \'\', \'%\', \'INBOUND\')','ADSW000001','2020-08-23 06:40:58'),(25,14,'add','customer_balance','IS000002489','INSERT INTO `customer_balance` (`credit_limit`, `balance`, `account_id`, `maxcredit_limit`) VALUES (0, 0, \'IS000002489\', NULL)','ADSW000001','2020-08-23 06:40:58'),(26,14,'add','customer_sdr','IS000002489','INSERT INTO `customer_sdr` (`rule_type`, `yearmonth`, `account_id`, `action_date`, `actiondate`, `service_startdate`, `service_stopdate`) VALUES (\'OPENINGBALANCE\', \'202008\', \'IS000002489\', \'2020-08-22 23:40:58\', \'2020-08-22 23:40:58\', \'2020-08-22 23:40:58\', \'2020-08-22 23:40:58\')','ADSW000001','2020-08-23 06:40:58'),(27,15,'insert','customer_sip_account','','INSERT INTO `customer_sip_account` (`account_id`, `username`, `secret`, `ipaddress`, `sip_cc`, `sip_cps`, `status`, `extension_no`, `voicemail`, `voicemail_email`, `callingcard_pin`) VALUES (\'IS000002489\', \'akumardayal\', \'Akumardayal@123\', \'\', \'1\', \'1\', \'1\', \'100\', \'1\', \'\', 553036)','ADSW000001','2020-08-23 07:27:47'),(28,16,'SDRAPI','ADDCREDIT','IS000002489','Array\n(\n    [account_id] => IS000002489\n    [user_type] => \n    [service_number] => Temporary Credits\n    [amount] => 1\n    [paid_on] => 2020-08-23 07:48:50\n    [notes] =>  (approved by Anand)\n    [created_by] => ADSW000001\n    [request] => ADDCREDIT\n    [schedulertime] => 12\n)\n','ADSW000001','2020-08-23 07:49:14'),(29,17,'insert','customer_dialplan','','INSERT INTO `customer_dialplan` (`account_id`, `dialplan_id`, `display_string`, `remove_string`, `maching_string`) VALUES (\'IS000002489\', \'DEMOROUT37\', \'%=>DEMOROUT37%\', \'\', \'%\')','ADSW000001','2020-08-23 07:56:46');
+/*!40000 ALTER TABLE `activity_log` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `autosystem_report_tmp`
+--
+
 DROP TABLE IF EXISTS `autosystem_report_tmp`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `autosystem_report_tmp` (
   `autosystem_report_id` int(11) NOT NULL AUTO_INCREMENT,
   `report_type` varchar(30) DEFAULT NULL,
@@ -108,14 +193,115 @@ CREATE TABLE `autosystem_report_tmp` (
   `bcc` varchar(500) DEFAULT NULL,
   PRIMARY KEY (`autosystem_report_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- ----------------------------
--- Records of autosystem_report_tmp
--- ----------------------------
+--
+-- Dumping data for table `autosystem_report_tmp`
+--
 
--- ----------------------------
--- Table structure for `carrier`
--- ----------------------------
+LOCK TABLES `autosystem_report_tmp` WRITE;
+/*!40000 ALTER TABLE `autosystem_report_tmp` DISABLE KEYS */;
+/*!40000 ALTER TABLE `autosystem_report_tmp` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `bundle_account`
+--
+
+DROP TABLE IF EXISTS `bundle_account`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `bundle_account` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `bundle_package_id` varchar(30) DEFAULT NULL,
+  `account_id` varchar(30) DEFAULT NULL,
+  `assign_dt` date DEFAULT NULL,
+  `account_bundle_key` varchar(30) DEFAULT NULL,
+  `bundle_package_desc` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `account_bundle_key` (`account_bundle_key`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `bundle_account`
+--
+
+LOCK TABLES `bundle_account` WRITE;
+/*!40000 ALTER TABLE `bundle_account` DISABLE KEYS */;
+/*!40000 ALTER TABLE `bundle_account` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `bundle_package`
+--
+
+DROP TABLE IF EXISTS `bundle_package`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `bundle_package` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `bundle_package_id` varchar(30) DEFAULT '',
+  `bundle_package_name` varchar(30) DEFAULT '',
+  `bundle_package_currency_id` int(11) DEFAULT '1',
+  `bundle_package_status` enum('1','0') DEFAULT '1',
+  `bundle_package_description` varchar(50) DEFAULT '',
+  `created_by` varchar(30) NOT NULL,
+  `create_dt` datetime DEFAULT NULL,
+  `update_dt` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `package_option` enum('1','0') DEFAULT '0',
+  `monthly_charges` double DEFAULT '0',
+  `bundle_option` enum('1','0') DEFAULT '0',
+  `bundle1_type` enum('MINUTE','COST') DEFAULT 'MINUTE',
+  `bundle1_value` double(12,6) DEFAULT NULL,
+  `bundle2_type` enum('MINUTE','COST') DEFAULT 'MINUTE',
+  `bundle2_value` double(12,6) DEFAULT NULL,
+  `bundle3_type` enum('MINUTE','COST') DEFAULT 'MINUTE',
+  `bundle3_value` double(12,6) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `bundle_package_id` (`bundle_package_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `bundle_package`
+--
+
+LOCK TABLES `bundle_package` WRITE;
+/*!40000 ALTER TABLE `bundle_package` DISABLE KEYS */;
+/*!40000 ALTER TABLE `bundle_package` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `bundle_package_prefixes`
+--
+
+DROP TABLE IF EXISTS `bundle_package_prefixes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `bundle_package_prefixes` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `bundle_package_id` varchar(30) NOT NULL,
+  `bundle_id` enum('1','2','3') NOT NULL DEFAULT '1',
+  `prefix` varchar(30) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `bundle_package_id` (`bundle_package_id`,`bundle_id`,`prefix`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `bundle_package_prefixes`
+--
+
+LOCK TABLES `bundle_package_prefixes` WRITE;
+/*!40000 ALTER TABLE `bundle_package_prefixes` DISABLE KEYS */;
+/*!40000 ALTER TABLE `bundle_package_prefixes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `carrier`
+--
+
 DROP TABLE IF EXISTS `carrier`;
 CREATE TABLE `carrier` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -142,10 +328,12 @@ CREATE TABLE `carrier` (
   `tax_number` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `key_carrier_id_name` (`carrier_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
-
-
+-- ----------------------------
+-- Records of carrier
+-- ----------------------------
+INSERT INTO `carrier` VALUES ('1', 'DEMO52', 'demo', 'DEMOCARR41', 'OUTBOUND', '1', '2', '10', '1', 'DEMO351', '5', '60', 'pid', 'G729,PCMU,PCMA,G722', '0', '0', '0', '0', 'exclusive', '4', 'NONE', null);
 
 -- ----------------------------
 -- Table structure for `carrier_callerid`
@@ -162,7 +350,13 @@ CREATE TABLE `carrier_callerid` (
   `route` enum('INBOUND','OUTBOUND') DEFAULT 'OUTBOUND',
   PRIMARY KEY (`id`),
   UNIQUE KEY `carrier_callerid_key` (`carrier_id`,`maching_string`,`route`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+
+-- ----------------------------
+-- Records of carrier_callerid
+-- ----------------------------
+INSERT INTO `carrier_callerid` VALUES ('1', '%', '', '%', 'DEMO52', '%=>%', '1', 'OUTBOUND');
+INSERT INTO `carrier_callerid` VALUES ('2', '%', '', '%', 'DEMO52', '%=>%', '1', 'INBOUND');
 
 -- ----------------------------
 -- Table structure for `carrier_daily_usage`
@@ -200,8 +394,11 @@ CREATE TABLE `carrier_daily_usage` (
   `code480` int(11) DEFAULT '0',
   PRIMARY KEY (`carrier_daily_usage_id`),
   UNIQUE KEY `carrier_account` (`carrier_account`,`prefix`,`calls_date`,`destination`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+-- ----------------------------
+-- Records of carrier_daily_usage
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for `carrier_ips`
@@ -221,8 +418,12 @@ CREATE TABLE `carrier_ips` (
   `passwd` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `carrier_id` (`carrier_id`,`ipaddress_name`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
+-- ----------------------------
+-- Records of carrier_ips
+-- ----------------------------
+INSERT INTO `carrier_ips` VALUES ('1', 'DEMOGATEWAY1598164755', 'DEMO52', 'Demogateway', '10.10.10.10', '100', '1', '1', 'IP', '', '');
 
 -- ----------------------------
 -- Table structure for `carrier_prefix`
@@ -238,8 +439,13 @@ CREATE TABLE `carrier_prefix` (
   `route` enum('INBOUND','OUTBOUND') DEFAULT 'INBOUND',
   PRIMARY KEY (`id`),
   UNIQUE KEY `carrier_prefix_id_key` (`carrier_id`,`maching_string`,`route`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
+-- ----------------------------
+-- Records of carrier_prefix
+-- ----------------------------
+INSERT INTO `carrier_prefix` VALUES ('1', 'DEMO52', '%', '', '%', '%=>%', 'OUTBOUND');
+INSERT INTO `carrier_prefix` VALUES ('2', 'DEMO52', '%', '', '%', '%=>%', 'INBOUND');
 
 -- ----------------------------
 -- Table structure for `carrier_rates`
@@ -268,8 +474,45 @@ CREATE TABLE `carrier_rates` (
   UNIQUE KEY `pt` (`ratecard_id`,`prefix`) USING BTREE,
   KEY `prefix` (`prefix`) USING BTREE,
   KEY `tariff_id` (`ratecard_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
+-- ----------------------------
+-- Records of carrier_rates
+-- ----------------------------
+INSERT INTO `carrier_rates` VALUES ('1', 'DEMOCARR47', '1', 'USA', '0.000000', '0.000000', '0.000300', '0', '1', '1', '0', '1.00', '0.00', '1', '2020-08-22 23:37:29', '2020-08-22 23:37:29', '1', '0.000000');
+
+-- ----------------------------
+-- Table structure for `carrier_ratesdump`
+-- ----------------------------
+DROP TABLE IF EXISTS `carrier_ratesdump`;
+CREATE TABLE `carrier_ratesdump` (
+  `rate_id` int(11) NOT NULL AUTO_INCREMENT,
+  `ratecard_id` varchar(30) NOT NULL,
+  `prefix` varchar(25) NOT NULL,
+  `destination` varchar(150) NOT NULL,
+  `setup_charge` double(12,6) NOT NULL DEFAULT '0.000000',
+  `rental` double(12,6) NOT NULL DEFAULT '0.000000',
+  `rate` double(12,6) NOT NULL DEFAULT '0.000000',
+  `connection_charge` double DEFAULT '0',
+  `minimal_time` int(11) NOT NULL DEFAULT '1',
+  `resolution_time` int(11) DEFAULT '1',
+  `grace_period` int(11) DEFAULT '0',
+  `rate_multiplier` decimal(5,2) DEFAULT '1.00',
+  `rate_addition` decimal(5,2) DEFAULT '0.00',
+  `rates_status` enum('0','1') NOT NULL DEFAULT '1',
+  `create_dt` timestamp NULL DEFAULT NULL,
+  `update_dt` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `inclusive_channel` int(11) DEFAULT '1',
+  `exclusive_per_channel_rental` double(12,6) DEFAULT '0.000000',
+  PRIMARY KEY (`rate_id`),
+  UNIQUE KEY `pt` (`ratecard_id`,`prefix`) USING BTREE,
+  KEY `prefix` (`prefix`) USING BTREE,
+  KEY `tariff_id` (`ratecard_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
+
+-- ----------------------------
+-- Records of carrier_ratesdump
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for `ci_cookies`
@@ -347,8 +590,11 @@ CREATE TABLE `connected_calls` (
   KEY `vs_account_links_ind2` (`client_id`,`db_source`,`carrier_id`) USING BTREE,
   KEY `carrier_id` (`carrier_id`) USING BTREE,
   KEY `destination` (`destination`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+-- ----------------------------
+-- Records of connected_calls
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for `credit_scheduler`
@@ -363,11 +609,14 @@ CREATE TABLE `credit_scheduler` (
   `status_id` enum('0','1','2') NOT NULL DEFAULT '0' COMMENT '0=acive,1=executed,2=cancelled',
   `created_by` varchar(30) NOT NULL,
   `create_date` datetime NOT NULL,
-  `modify_date` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  `modify_date` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
-
+-- ----------------------------
+-- Records of credit_scheduler
+-- ----------------------------
+INSERT INTO `credit_scheduler` VALUES ('1', 'IS000002489', '1.000000', '2020-08-23 12:49:14', 'N', '0', 'ADSW000001', '2020-08-23 00:49:14', null);
 
 -- ----------------------------
 -- Table structure for `customer_balance`
@@ -382,8 +631,12 @@ CREATE TABLE `customer_balance` (
   `update_dt` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_id_account_id` (`account_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
+-- ----------------------------
+-- Records of customer_balance
+-- ----------------------------
+INSERT INTO `customer_balance` VALUES ('1', '1.000000', '0.000000', 'IS000002489', null, '2020-08-23 07:49:14');
 
 -- ----------------------------
 -- Table structure for `customer_bundle_sdr`
@@ -392,29 +645,24 @@ DROP TABLE IF EXISTS `customer_bundle_sdr`;
 CREATE TABLE `customer_bundle_sdr` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `account_id` varchar(30) DEFAULT NULL,
+  `account_bundle_key` varchar(50) DEFAULT '',
+  `bundle_package_id` varchar(30) DEFAULT '',
   `rule_type` varchar(30) DEFAULT NULL,
   `yearmonth` varchar(10) DEFAULT NULL,
-  `service_number` varchar(150) DEFAULT NULL,
-  `service_charges` double(12,6) DEFAULT NULL,
-  `tax1` double(10,4) DEFAULT NULL,
-  `tax1_cost` double(12,6) DEFAULT '0.000000',
-  `tax2` double(10,4) DEFAULT NULL,
-  `tax2_cost` double(12,6) DEFAULT '0.000000',
-  `tax3` double(10,4) DEFAULT NULL,
-  `tax3_cost` double(12,6) DEFAULT '0.000000',
-  `total_tax` double(12,6) DEFAULT NULL,
-  `cost` double(12,6) DEFAULT '0.000000',
-  `total_cost` double(20,6) DEFAULT '0.000000',
-  `detail` text,
-  `otherdata` varchar(300) DEFAULT NULL,
+  `bundle_package_name` varchar(150) DEFAULT '',
+  `total_allowed` double(18,6) DEFAULT '0.000000',
+  `bundle_type` varchar(300) DEFAULT '',
   `sdr_consumption` double(20,6) DEFAULT NULL,
   `service_startdate` date DEFAULT NULL,
   `service_stopdate` date DEFAULT NULL,
   `action_date` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `usersdr_id` (`account_id`,`rule_type`,`yearmonth`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+  KEY `package_id` (`account_id`,`rule_type`,`yearmonth`,`account_bundle_key`,`bundle_package_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+-- ----------------------------
+-- Records of customer_bundle_sdr
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for `customer_callerid`
@@ -432,7 +680,13 @@ CREATE TABLE `customer_callerid` (
   `route` enum('INBOUND','OUTBOUND','DTSBASEDCLI') DEFAULT 'OUTBOUND',
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_callerid_key` (`account_id`,`maching_string`,`route`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+
+-- ----------------------------
+-- Records of customer_callerid
+-- ----------------------------
+INSERT INTO `customer_callerid` VALUES ('1', '%', null, '', '%', 'IS000002489', '%=>%', '1', 'INBOUND');
+INSERT INTO `customer_callerid` VALUES ('2', '%', null, '', '%', 'IS000002489', '%=>%', '1', 'OUTBOUND');
 
 -- ----------------------------
 -- Table structure for `customer_card_details`
@@ -522,10 +776,11 @@ CREATE TABLE `customer_daily_usages` (
   `opening_balance` double(16,6) DEFAULT '0.000000',
   PRIMARY KEY (`id`),
   UNIQUE KEY `account_id` (`account_id`,`action_date`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-
-
+-- ----------------------------
+-- Records of customer_daily_usages
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for `customer_default_permissions`
@@ -562,7 +817,13 @@ CREATE TABLE `customer_dialpattern` (
   `route` enum('INBOUND','OUTBOUND') DEFAULT 'OUTBOUND',
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_dialplan_key` (`account_id`,`maching_string`,`route`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+
+-- ----------------------------
+-- Records of customer_dialpattern
+-- ----------------------------
+INSERT INTO `customer_dialpattern` VALUES ('1', 'IS000002489', '%', null, '', '%', '%=>%', '1', 'OUTBOUND');
+INSERT INTO `customer_dialpattern` VALUES ('2', 'IS000002489', '%', null, '', '%', '%=>%', '1', 'INBOUND');
 
 -- ----------------------------
 -- Table structure for `customer_dialplan`
@@ -579,7 +840,12 @@ CREATE TABLE `customer_dialplan` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_carrier_dialplan_key` (`account_id`,`maching_string`) USING BTREE,
   KEY `maching_string_key` (`maching_string`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
+-- ----------------------------
+-- Records of customer_dialplan
+-- ----------------------------
+INSERT INTO `customer_dialplan` VALUES ('1', 'IS000002489', 'DEMOROUT37', '%', '%=>DEMOROUT37%', '', null);
 
 -- ----------------------------
 -- Table structure for `customer_ips`
@@ -599,8 +865,11 @@ CREATE TABLE `customer_ips` (
   UNIQUE KEY `user_ips_ipaddress_key` (`ipaddress`,`dialprefix`) USING BTREE,
   KEY `account_id` (`account_id`) USING BTREE,
   KEY `ipaddress` (`ipaddress`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+-- ----------------------------
+-- Records of customer_ips
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for `customer_notification`
@@ -617,7 +886,11 @@ CREATE TABLE `customer_notification` (
   `update_dt` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `account_id` (`account_id`,`notify_name`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- ----------------------------
+-- Records of customer_notification
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for `customer_payment_credentials`
@@ -679,8 +952,45 @@ CREATE TABLE `customer_rates` (
   UNIQUE KEY `pt` (`ratecard_id`,`prefix`) USING BTREE,
   KEY `prefix` (`prefix`) USING BTREE,
   KEY `tariff_id` (`ratecard_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=743 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
+-- ----------------------------
+-- Records of customer_rates
+-- ----------------------------
+INSERT INTO `customer_rates` VALUES ('1', 'DEMOCUST43', '1', 'USA', '0.000000', '0.000000', '0.000310', '0', '1', '1', '0', '1.00', '0.00', '1', '2020-08-22 23:37:47', '2020-08-22 23:37:47', '1', '0.000000');
+
+-- ----------------------------
+-- Table structure for `customer_ratesdump`
+-- ----------------------------
+DROP TABLE IF EXISTS `customer_ratesdump`;
+CREATE TABLE `customer_ratesdump` (
+  `rate_id` int(11) NOT NULL AUTO_INCREMENT,
+  `ratecard_id` varchar(30) NOT NULL,
+  `prefix` varchar(25) NOT NULL,
+  `destination` varchar(150) NOT NULL,
+  `setup_charge` double(12,6) NOT NULL DEFAULT '0.000000',
+  `rental` double(12,6) NOT NULL DEFAULT '0.000000',
+  `rate` double(12,6) NOT NULL DEFAULT '0.000000',
+  `connection_charge` double DEFAULT '0',
+  `minimal_time` int(11) NOT NULL DEFAULT '1',
+  `resolution_time` int(11) DEFAULT '1',
+  `grace_period` int(11) DEFAULT '0',
+  `rate_multiplier` decimal(5,2) DEFAULT '1.00',
+  `rate_addition` decimal(5,2) DEFAULT '0.00',
+  `rates_status` enum('0','1') NOT NULL DEFAULT '1',
+  `create_dt` timestamp NULL DEFAULT NULL,
+  `update_dt` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `inclusive_channel` int(11) DEFAULT '1',
+  `exclusive_per_channel_rental` double(12,6) DEFAULT '0.000000',
+  PRIMARY KEY (`rate_id`),
+  UNIQUE KEY `pt` (`ratecard_id`,`prefix`) USING BTREE,
+  KEY `prefix` (`prefix`) USING BTREE,
+  KEY `tariff_id` (`ratecard_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
+
+-- ----------------------------
+-- Records of customer_ratesdump
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for `customer_sdr`
@@ -731,7 +1041,13 @@ CREATE TABLE `customer_sdr` (
   `actiondate` date DEFAULT NULL,
   PRIMARY KEY (`user_sdr_id`),
   KEY `usersdr_id` (`account_id`,`rule_type`,`yearmonth`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+
+-- ----------------------------
+-- Records of customer_sdr
+-- ----------------------------
+INSERT INTO `customer_sdr` VALUES ('1', '0', 'IS000002489', 'OPENINGBALANCE', '202008', '2020-08-22 23:40:58', null, null, null, '0.000000', null, '0.000000', null, '0.000000', null, '0.000000', '0.000000', null, null, null, '2020-08-22', '2020-08-22', '0.000000', '0.000000', '0.000000', '0.000000', '0.000000', '0.000000', '0.000000', '0.000000', '0.000000', '0.000000', '0.000000', '0.000000', '0.000000', '0.000000', '0.000000', '0.000000', '0.00', '0.00', '0.00', '2020-08-22');
+INSERT INTO `customer_sdr` VALUES ('2', '0', 'IS000002489', 'ADDCREDIT', '202008', '2020-08-23 07:49:14', 'Temporary Credits', '0.000000', '0.0000', '0.000000', '0.0000', '0.000000', '0.0000', '0.000000', '0.000000', '0.000000', '1.000000', '0', '0', null, '2020-08-23', '2020-08-23', '0.000000', '0.000000', '0.000000', '0.000000', '0.000000', '0.000000', '0.000000', '0.000000', '0.000000', '0.000000', '0.000000', '0.000000', '0.000000', '0.000000', '0.000000', '0.000000', '0.00', '0.00', '0.00', '2020-08-23');
 
 -- ----------------------------
 -- Table structure for `customer_sip_account`
@@ -760,8 +1076,12 @@ CREATE TABLE `customer_sip_account` (
   UNIQUE KEY `account_id_2` (`account_id`,`extension_no`) USING BTREE,
   UNIQUE KEY `callingcard_pin` (`callingcard_pin`) USING BTREE,
   KEY `account_id` (`account_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
+-- ----------------------------
+-- Records of customer_sip_account
+-- ----------------------------
+INSERT INTO `customer_sip_account` VALUES ('1', 'akumardayal', 'Akumardayal@123', '', '1', 'IS000002489', '1', '1', 'NO', '100', '1', '', null, null, 'rpid', 'G729,PCMU,PCMA', '553036');
 
 -- ----------------------------
 -- Table structure for `customer_type_permissions`
@@ -814,12 +1134,55 @@ CREATE TABLE `customers` (
   `update_dt` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `created_by` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`customer_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of customers
 -- ----------------------------
 INSERT INTO `customers` VALUES ('1', 'ADSW000001', '', 'Admin', 'Kolkata', '100', null, '125478963669', 'openvoips@gmail.com', 'ADMIN', null, null, 'prepaid', 'monthly', '30', null, null, '1', 'LIVE', null, '2019-05-07 13:03:31', null);
+INSERT INTO `customers` VALUES ('2', 'IS000002489', 'Demo Company', 'Demo', '', '0', '0', '', 'demo@democompany.com', 'CUSTOMER', null, null, 'prepaid', 'monthly', '1', '2020-09-01', '', '1', 'LIVE', '2020-08-22 23:40:58', null, 'ADSW000001');
+
+-- ----------------------------
+-- Table structure for `daily_usage`
+-- ----------------------------
+DROP TABLE IF EXISTS `daily_usage`;
+CREATE TABLE `daily_usage` (
+  `daily_usagedata_id` int(11) NOT NULL AUTO_INCREMENT,
+  `account_id` varchar(30) DEFAULT NULL,
+  `company_name` varchar(150) DEFAULT '',
+  `username` varchar(150) DEFAULT '',
+  `record_date` date DEFAULT NULL,
+  `currency` varchar(30) DEFAULT NULL,
+  `currency_id` int(11) DEFAULT '0',
+  `mins_out` int(11) DEFAULT '0',
+  `calls_out` int(11) DEFAULT '0',
+  `acd_out` int(11) DEFAULT '0',
+  `asr_out` double(6,2) DEFAULT '0.00',
+  `usercost_out` double(15,6) DEFAULT '0.000000',
+  `carriercost_out` double(15,6) DEFAULT '0.000000',
+  `profit_out` double(15,6) DEFAULT '0.000000',
+  `calls_in` int(11) DEFAULT '0',
+  `mins_in` int(11) DEFAULT '0',
+  `usercost_in` double(15,6) DEFAULT '0.000000',
+  `carriercost_in` double(15,6) DEFAULT '0.000000',
+  `did_rental_user` double(15,6) DEFAULT '0.000000',
+  `did_setup_user` double(15,6) DEFAULT '0.000000',
+  `didrental_carrier` double(15,6) DEFAULT '0.000000',
+  `didsetup_carrier` double(15,6) DEFAULT '0.000000',
+  `other_services` double(15,6) DEFAULT '0.000000',
+  `profit_in` double(15,6) DEFAULT '0.000000',
+  `total_profit` double(15,6) DEFAULT '0.000000',
+  `payment` double(15,6) DEFAULT '0.000000',
+  `reimburse` double(15,6) DEFAULT '0.000000',
+  `credit_added` double(15,6) DEFAULT '0.000000',
+  `credit_remove` double(15,6) DEFAULT '0.000000',
+  PRIMARY KEY (`daily_usagedata_id`),
+  UNIQUE KEY `account_id` (`account_id`,`record_date`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- ----------------------------
+-- Records of daily_usage
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for `delete_history`
@@ -833,8 +1196,11 @@ CREATE TABLE `delete_history` (
   `delete_code` varchar(30) NOT NULL,
   `deleted_by` varchar(30) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+-- ----------------------------
+-- Records of delete_history
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for `dialplan`
@@ -851,8 +1217,12 @@ CREATE TABLE `dialplan` (
   `update_dt` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `dialplan_id_name` (`dialplan_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
+-- ----------------------------
+-- Records of dialplan
+-- ----------------------------
+INSERT INTO `dialplan` VALUES ('1', 'DEMOROUT37', 'DemoRoute', '1', '', '', '2020-08-22 23:39:37', '2020-08-22 23:39:37');
 
 -- ----------------------------
 -- Table structure for `dialplan_prefix_list`
@@ -877,9 +1247,12 @@ CREATE TABLE `dialplan_prefix_list` (
   KEY `dialplan_id_name` (`dialplan_id`) USING BTREE,
   KEY `dial_prefix` (`dial_prefix`) USING BTREE,
   KEY `route_status` (`route_status`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin7;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin7;
 
-
+-- ----------------------------
+-- Records of dialplan_prefix_list
+-- ----------------------------
+INSERT INTO `dialplan_prefix_list` VALUES ('1', 'DEMOROUT37', '1', '1', '1', 'DEMO52', '0', '00:00:00', '6', '23:59:59', '100', '2020-08-22 23:39:45', '2020-08-22 23:39:45');
 
 -- ----------------------------
 -- Table structure for `did`
@@ -905,7 +1278,11 @@ CREATE TABLE `did` (
   PRIMARY KEY (`did_id`),
   UNIQUE KEY `did_number` (`did_number`) USING BTREE,
   UNIQUE KEY `did_number_2` (`did_number`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- ----------------------------
+-- Records of did
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for `did_dst`
@@ -915,17 +1292,65 @@ CREATE TABLE `did_dst` (
   `did_dst_id` int(11) NOT NULL AUTO_INCREMENT,
   `did_number` varchar(30) DEFAULT NULL,
   `account_id` varchar(30) DEFAULT NULL,
-  `dst_type` enum('IP','USER','PSTN') DEFAULT 'USER',
+  `dst_type` enum('IP','CUSTOMER','PSTN') DEFAULT 'IP',
   `dst_destination` varchar(30) DEFAULT NULL,
   `create_date` datetime DEFAULT NULL,
   `update_date` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-  `dst_type2` enum('IP','USER','PSTN') DEFAULT 'IP',
+  `dst_type2` enum('IP','CUSTOMER','PSTN') DEFAULT 'IP',
   `dst_destination2` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`did_dst_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of did_dst
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `did_dstdump`
+-- ----------------------------
+DROP TABLE IF EXISTS `did_dstdump`;
+CREATE TABLE `did_dstdump` (
+  `did_dst_id` int(11) NOT NULL AUTO_INCREMENT,
+  `did_number` varchar(30) DEFAULT NULL,
+  `account_id` varchar(30) DEFAULT NULL,
+  `dst_type` enum('IP','CUSTOMER','PSTN') DEFAULT 'IP',
+  `dst_destination` varchar(30) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `dst_type2` enum('IP','CUSTOMER','PSTN') DEFAULT 'IP',
+  `dst_destination2` varchar(30) DEFAULT NULL,
+  PRIMARY KEY (`did_dst_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
+
+-- ----------------------------
+-- Records of did_dstdump
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `diddump`
+-- ----------------------------
+DROP TABLE IF EXISTS `diddump`;
+CREATE TABLE `diddump` (
+  `did_id` int(11) NOT NULL DEFAULT '0',
+  `did_number` varchar(30) DEFAULT NULL,
+  `did_status` enum('NEW','USED','DEAD','BLOCKED') DEFAULT 'NEW',
+  `carrier_id` varchar(30) DEFAULT NULL,
+  `account_id` varchar(30) DEFAULT NULL,
+  `assign_date` datetime DEFAULT NULL,
+  `reseller1_account_id` varchar(30) DEFAULT NULL,
+  `reseller1_assign_date` datetime DEFAULT NULL,
+  `reseller2_account_id` varchar(30) DEFAULT NULL,
+  `reseller2_assign_date` datetime DEFAULT NULL,
+  `reseller3_account_id` varchar(30) DEFAULT NULL,
+  `reseller3_assign_date` datetime DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `channels` int(11) DEFAULT '1',
+  `did_name` varchar(150) DEFAULT NULL,
+  `number_type` enum('TFN','DID') DEFAULT 'DID'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
+
+-- ----------------------------
+-- Records of diddump
 -- ----------------------------
 
 -- ----------------------------
@@ -942,8 +1367,12 @@ CREATE TABLE `emaillog` (
   `actionfrom` varchar(500) DEFAULT NULL,
   `email_to` varchar(500) DEFAULT NULL,
   PRIMARY KEY (`email_log_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
+-- ----------------------------
+-- Records of emaillog
+-- ----------------------------
+INSERT INTO `emaillog` VALUES ('1', 'IS000002489', '2020-08-23 12:49:14', 'Temporary credit in IS000002489 account', '', null, 'GUI-TemporaryCredit', 'demo@democompany.com');
 
 -- ----------------------------
 -- Table structure for `failed_calls`
@@ -1110,7 +1539,7 @@ CREATE TABLE `livecalls` (
   KEY `reseller1_account_id` (`reseller1_account_id`) USING BTREE,
   KEY `reseller2_account_id` (`reseller2_account_id`) USING BTREE,
   KEY `reseller3_account_id` (`reseller3_account_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of livecalls
@@ -1124,7 +1553,7 @@ CREATE TABLE `payment_blocking` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `block_text` varchar(50) NOT NULL,
   `reason` text NOT NULL,
-  `dt_updated` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  `dt_updated` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `updated_by` varchar(30) NOT NULL DEFAULT 'System',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -1151,8 +1580,12 @@ CREATE TABLE `payment_history` (
   `created_by` varchar(30) NOT NULL,
   `create_dt` datetime NOT NULL,
   PRIMARY KEY (`payment_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
+-- ----------------------------
+-- Records of payment_history
+-- ----------------------------
+INSERT INTO `payment_history` VALUES ('1', 'IS000002489', 'ADDCREDIT', '1.000000', '2020-08-23 07:48:50', 'Temporary Credits', '', '', '', '', 'ADSW000001', '2020-08-23 00:14:49');
 
 -- ----------------------------
 -- Table structure for `payment_options_del`
@@ -1186,8 +1619,11 @@ CREATE TABLE `payment_tracking` (
   `order_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `attempt_check` enum('Y','N') NOT NULL DEFAULT 'Y',
   PRIMARY KEY (`payment_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+-- ----------------------------
+-- Records of payment_tracking
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for `providers`
@@ -1205,8 +1641,12 @@ CREATE TABLE `providers` (
   `modify_by` varchar(30) NOT NULL,
   `modify_date` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
+-- ----------------------------
+-- Records of providers
+-- ----------------------------
+INSERT INTO `providers` VALUES ('1', 'DEMO351', 'demo', '', '', '1', 'ADSW000001', '2020-08-22 23:38:26', '', null);
 
 -- ----------------------------
 -- Table structure for `ratecard`
@@ -1222,8 +1662,13 @@ CREATE TABLE `ratecard` (
   `ratecard_for` enum('INCOMING','OUTGOING') DEFAULT 'OUTGOING',
   PRIMARY KEY (`id`),
   UNIQUE KEY `ratecard_id` (`ratecard_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
+-- ----------------------------
+-- Records of ratecard
+-- ----------------------------
+INSERT INTO `ratecard` VALUES ('1', 'DEMOCUST43', 'demoCustomer', 'CUSTOMER', 'ADSW000001', '1', 'OUTGOING');
+INSERT INTO `ratecard` VALUES ('2', 'DEMOCARR47', 'demoCarrier', 'CARRIER', 'ADSW000001', '1', 'OUTGOING');
 
 -- ----------------------------
 -- Table structure for `reseller_dialplan`
@@ -1236,62 +1681,64 @@ CREATE TABLE `reseller_dialplan` (
   `create_dt` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `reseller_dialplan_key` (`account_id`,`dialplan_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
-
-
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- ----------------------------
--- Table structure for `switch_daily_usage`
+-- Records of reseller_dialplan
 -- ----------------------------
-DROP TABLE IF EXISTS `daily_usage`;
-CREATE TABLE `daily_usage` (
-  `daily_usagedata_id` int(11) NOT NULL AUTO_INCREMENT,
+
+-- ----------------------------
+-- Table structure for `sdr`
+-- ----------------------------
+DROP TABLE IF EXISTS `sdr`;
+CREATE TABLE `sdr` (
+  `user_sdr_id` int(11) NOT NULL DEFAULT '0',
+  `manualentry` enum('0','1') DEFAULT '0',
   `account_id` varchar(30) DEFAULT NULL,
-  `company_name` varchar(150) DEFAULT '',
-  `username` varchar(150) DEFAULT '',
-  `record_date` date DEFAULT NULL,
-  `currency` varchar(30) DEFAULT NULL,
-  `currency_id` int(11) DEFAULT '0',
-  `mins_out` int(11) DEFAULT '0',
-  `calls_out` int(11) DEFAULT '0',
-  `acd_out` int(11) DEFAULT '0',
-  `asr_out` double(6,2) DEFAULT '0.00',
-  `usercost_out` double(15,6) DEFAULT '0.000000',
-  `carriercost_out` double(15,6) DEFAULT '0.000000',
-  `profit_out` double(15,6) DEFAULT '0.000000',
-  `calls_in` int(11) DEFAULT '0',
-  `mins_in` int(11) DEFAULT '0',
-  `usercost_in` double(15,6) DEFAULT '0.000000',
-  `carriercost_in` double(15,6) DEFAULT '0.000000',
-  `did_rental_user` double(15,6) DEFAULT '0.000000',
-  `did_setup_user` double(15,6) DEFAULT '0.000000',
-  `didrental_carrier` double(15,6) DEFAULT '0.000000',
-  `didsetup_carrier` double(15,6) DEFAULT '0.000000',
-  `other_services` double(15,6) DEFAULT '0.000000',
-  `profit_in` double(15,6) DEFAULT '0.000000',
-  `total_profit` double(15,6) DEFAULT '0.000000',
-  `payment` double(15,6) DEFAULT '0.000000',
-  `reimburse` double(15,6) DEFAULT '0.000000',
-  `credit_added` double(15,6) DEFAULT '0.000000',
-  `credit_remove` double(15,6) DEFAULT '0.000000',
-  PRIMARY KEY (`daily_usagedata_id`),
-  UNIQUE KEY `account_id` (`account_id`,`record_date`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `rule_type` varchar(30) DEFAULT NULL,
+  `yearmonth` varchar(10) DEFAULT NULL,
+  `action_date` datetime DEFAULT NULL,
+  `service_number` varchar(150) DEFAULT NULL,
+  `service_charges` double(12,6) DEFAULT NULL,
+  `tax1` double(10,4) DEFAULT NULL,
+  `tax1_cost` double(12,6) DEFAULT '0.000000',
+  `tax2` double(10,4) DEFAULT NULL,
+  `tax2_cost` double(12,6) DEFAULT '0.000000',
+  `tax3` double(10,4) DEFAULT NULL,
+  `tax3_cost` double(12,6) DEFAULT '0.000000',
+  `total_tax` double(12,6) DEFAULT NULL,
+  `cost` double(12,6) DEFAULT '0.000000',
+  `total_cost` double(20,6) DEFAULT '0.000000',
+  `detail` text,
+  `otherdata` varchar(300) DEFAULT NULL,
+  `sdr_consumption` double(20,6) DEFAULT NULL,
+  `service_startdate` date DEFAULT NULL,
+  `service_stopdate` date DEFAULT NULL,
+  `seller_tax1` double(12,6) DEFAULT '0.000000',
+  `seller_tax2` double(12,6) DEFAULT '0.000000',
+  `seller_tax3` double(12,6) DEFAULT '0.000000',
+  `seller_tax1_cost` double(12,6) DEFAULT '0.000000',
+  `seller_tax2_cost` double(12,6) DEFAULT '0.000000',
+  `seller_tax3_cost` double(12,6) DEFAULT '0.000000',
+  `seller_cost` double(12,6) DEFAULT '0.000000',
+  `total_seller_cost` double(12,6) DEFAULT '0.000000',
+  `carrier_tax1` double(12,6) DEFAULT '0.000000',
+  `carrier_tax2` double(12,6) DEFAULT '0.000000',
+  `carrier_tax3` double(12,6) DEFAULT '0.000000',
+  `carrier_tax1_cost` double(12,6) DEFAULT '0.000000',
+  `carrier_tax2_cost` double(12,6) DEFAULT '0.000000',
+  `carrier_tax3_cost` double(12,6) DEFAULT '0.000000',
+  `carrier_cost` double(12,6) DEFAULT '0.000000',
+  `total_carrier_cost` double(12,6) DEFAULT '0.000000',
+  `user_usage` double(15,2) DEFAULT '0.00',
+  `seller_usage` double(15,2) DEFAULT '0.00',
+  `carrier_usage` double(15,2) DEFAULT '0.00',
+  `actiondate` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
 
 -- ----------------------------
--- Table structure for `switch_delete_history`
+-- Records of sdr
 -- ----------------------------
-DROP TABLE IF EXISTS `delete_history`;
-CREATE TABLE `delete_history` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `delete_type` varchar(30) NOT NULL,
-  `delete_status` varchar(30) NOT NULL,
-  `delete_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `delete_code` varchar(30) NOT NULL,
-  `deleted_by` varchar(30) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
 
 -- ----------------------------
 -- Table structure for `sys_countries`
@@ -1363,7 +1810,7 @@ INSERT INTO `sys_countries` VALUES ('49', 'COD', 'CD', '243', 'Democratic Republ
 INSERT INTO `sys_countries` VALUES ('50', 'COG', 'CG', '242', 'Republic of the Congo', '1', '0');
 INSERT INTO `sys_countries` VALUES ('51', 'COK', 'CK', '682', 'Cook Islands', '1', '0');
 INSERT INTO `sys_countries` VALUES ('52', 'CRI', 'CR', '506', 'Costa Rica', '1', '0');
-INSERT INTO `sys_countries` VALUES ('53', 'CIV', 'CI', '225', 'Cote Divoire', '1', '0');
+INSERT INTO `sys_countries` VALUES ('53', 'CIV', 'CI', '225', 'Cote D\'ivoire', '1', '0');
 INSERT INTO `sys_countries` VALUES ('54', 'HRV', 'HR', '385', 'Croatia', '1', '0');
 INSERT INTO `sys_countries` VALUES ('55', 'CUB', 'CU', '53', 'Cuba', '1', '0');
 INSERT INTO `sys_countries` VALUES ('56', 'CYP', 'CY', '357', 'Cyprus', '1', '0');
@@ -1567,7 +2014,7 @@ DROP TABLE IF EXISTS `sys_currencies`;
 CREATE TABLE `sys_currencies` (
   `currency_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
-  `symbol` varchar(5) NOT NULL DEFAULT '',
+  `symbol` varchar(20) NOT NULL DEFAULT '',
   `detail_name` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`currency_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
@@ -1592,7 +2039,7 @@ CREATE TABLE `sys_currencies_conversions` (
   `date` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_currency` (`currency_id`,`date`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=454 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of sys_currencies_conversions
@@ -1619,9 +2066,13 @@ CREATE TABLE `sys_invoice_config` (
   `create_dt` datetime DEFAULT NULL,
   `update_dt` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `account_id` (`account_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+  UNIQUE KEY `account_id` (`account_id`),
+  UNIQUE KEY `account_id_2` (`account_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+-- ----------------------------
+-- Records of sys_invoice_config
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for `sys_payment_credentials`
@@ -1635,12 +2086,11 @@ CREATE TABLE `sys_payment_credentials` (
   `status` enum('Y','N') NOT NULL DEFAULT 'Y',
   PRIMARY KEY (`id`),
   UNIQUE KEY `account_id` (`account_id`,`payment_method`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of sys_payment_credentials
 -- ----------------------------
-
 INSERT INTO `sys_payment_credentials` VALUES ('30', 'ADMIN', 'paypal-sdk', '{\"business\":\"openvoips@gmail.com\",\"pdt_identity_token\":\"sjahgsjahsjahshajshahsjkahsjajshalkshajks\"}', 'Y');
 
 -- ----------------------------
@@ -1654,7 +2104,7 @@ CREATE TABLE `sys_rule_options` (
   `option_group` varchar(50) NOT NULL,
   `status_id` enum('1','0') NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of sys_rule_options
@@ -1684,7 +2134,6 @@ INSERT INTO `sys_rule_options` VALUES ('26', 'biz-network-diagram', 'Network Dia
 INSERT INTO `sys_rule_options` VALUES ('29', 'CREDITNOTES', 'Credit Notes', 'payment', '1');
 INSERT INTO `sys_rule_options` VALUES ('30', 'DEBITNOTES', 'Debit Notes', 'payment', '1');
 
-
 -- ----------------------------
 -- Table structure for `sys_sdr_terms`
 -- ----------------------------
@@ -1695,8 +2144,9 @@ CREATE TABLE `sys_sdr_terms` (
   `term` varchar(30) NOT NULL,
   `display_text` varchar(255) NOT NULL,
   `cost_calculation_formula` varchar(10) NOT NULL,
-  PRIMARY KEY (`term_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`term_id`),
+  UNIQUE KEY `term` (`term`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of sys_sdr_terms
@@ -1719,6 +2169,28 @@ INSERT INTO `sys_sdr_terms` VALUES ('20', 'balance', 'ADDNETOFFBALANCE', 'Add Ne
 INSERT INTO `sys_sdr_terms` VALUES ('21', 'balance', 'REMOVENETOFFBALANCE', 'Refund Net-Off transaction', '-');
 INSERT INTO `sys_sdr_terms` VALUES ('22', 'balance', 'CREDITNOTES', 'Credit Notes', '+');
 INSERT INTO `sys_sdr_terms` VALUES ('23', 'balance', 'DEBITNOTES', 'Debit Notes', '-');
+
+-- ----------------------------
+-- Table structure for `sys_signup`
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_signup`;
+CREATE TABLE `sys_signup` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `signupkey` varchar(50) DEFAULT NULL,
+  `tariff_id` varchar(30) DEFAULT NULL,
+  `dialplan_id` varchar(30) DEFAULT NULL,
+  `business_holder` enum('ADMIN','RESELLER1','RESELLER2','RESELLER3') DEFAULT NULL,
+  `business_holder_account_id` varchar(30) DEFAULT NULL,
+  `default_balance` double(16,6) DEFAULT NULL,
+  `status_id` enum('0','1') DEFAULT '1',
+  `signup_plan` varchar(150) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- ----------------------------
+-- Records of sys_signup
+-- ----------------------------
+
 -- ----------------------------
 -- Table structure for `sys_sitesetup`
 -- ----------------------------
@@ -1757,7 +2229,7 @@ INSERT INTO `sys_states` VALUES ('5', 'UTTARAKHAND', '05', 'INDIA');
 INSERT INTO `sys_states` VALUES ('6', 'HARYANA', '06', 'INDIA');
 INSERT INTO `sys_states` VALUES ('7', 'DELHI', '07', 'INDIA');
 INSERT INTO `sys_states` VALUES ('8', 'RAJASTHAN', '08', 'INDIA');
-INSERT INTO `sys_states` VALUES ('9', 'UTTAR  PRADESH', '09', 'INDIA');
+INSERT INTO `sys_states` VALUES ('9', 'UTTAR  PRADESH', '09', 'INDIA');
 INSERT INTO `sys_states` VALUES ('10', 'BIHAR', '10', 'INDIA');
 INSERT INTO `sys_states` VALUES ('11', 'SIKKIM', '11', 'INDIA');
 INSERT INTO `sys_states` VALUES ('12', 'ARUNACHAL PRADESH', '12', 'INDIA');
@@ -1800,8 +2272,8 @@ CREATE TABLE `tariff` (
   `tariff_description` varchar(50) DEFAULT NULL,
   `tariff_type` enum('CARRIER','CUSTOMER') NOT NULL DEFAULT 'CARRIER',
   `created_by` varchar(30) NOT NULL,
-  `create_dt` DATETIME NULL DEFAULT NULL,
-  `update_dt` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  `create_dt` datetime DEFAULT NULL,
+  `update_dt` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `package_option` enum('1','0') DEFAULT '0',
   `monthly_charges` double DEFAULT '0',
   `bundle_option` enum('1','0') DEFAULT '0',
@@ -1813,22 +2285,13 @@ CREATE TABLE `tariff` (
   `bundle3_value` double(12,6) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `tariff_id_name` (`tariff_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
-
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
--- Table structure for `tariff_bundle_prefixes`
+-- Records of tariff
 -- ----------------------------
-DROP TABLE IF EXISTS `tariff_bundle_prefixes`;
-CREATE TABLE `tariff_bundle_prefixes` (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
-  `tariff_id` varchar(30) NOT NULL,
-  `bundle_id` enum('1','2','3') NOT NULL DEFAULT '1',
-  `prefix` varchar(30) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `tariff_id_bundle` (`tariff_id`,`bundle_id`,`prefix`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=169 DEFAULT CHARSET=latin1;
-
+INSERT INTO `tariff` VALUES ('1', 'DEMOCUST32', 'demoCustomer', '1', '1', '', 'CUSTOMER', 'ADSW000001', '2020-08-22 22:43:08', '2020-08-22 22:43:08', '0', '0', '0', 'MINUTE', null, 'MINUTE', null, 'MINUTE', null);
+INSERT INTO `tariff` VALUES ('2', 'DEMOCARR41', 'demoCarrier', '1', '1', '', 'CARRIER', 'ADSW000001', '2020-08-22 22:44:00', '2020-08-22 22:44:00', '0', '0', '0', 'MINUTE', null, 'MINUTE', null, 'MINUTE', null);
 
 -- ----------------------------
 -- Table structure for `tariff_ratecard_map`
@@ -1848,7 +2311,29 @@ CREATE TABLE `tariff_ratecard_map` (
   PRIMARY KEY (`id`),
   KEY `ratecard_id` (`ratecard_id`) USING BTREE,
   KEY `tariff_id` (`tariff_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+
+-- ----------------------------
+-- Records of tariff_ratecard_map
+-- ----------------------------
+INSERT INTO `tariff_ratecard_map` VALUES ('1', 'DEMOCARR47', 'DEMOCARR41', '0', '00:00:00', '6', '23:59:59', '1', '1', 'OUTGOING');
+INSERT INTO `tariff_ratecard_map` VALUES ('2', 'DEMOCUST43', 'DEMOCUST32', '0', '00:00:00', '6', '23:59:59', '1', '1', 'OUTGOING');
+
+-- ----------------------------
+-- Table structure for `usa_area_codes`
+-- ----------------------------
+DROP TABLE IF EXISTS `usa_area_codes`;
+CREATE TABLE `usa_area_codes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `area_code` varchar(50) DEFAULT NULL,
+  `city` varchar(50) DEFAULT NULL,
+  `state` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
+
+-- ----------------------------
+-- Records of usa_area_codes
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for `version`
@@ -1946,120 +2431,16 @@ CREATE TABLE `web_access` (
   `create_dt` datetime DEFAULT NULL,
   `update_dt` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
-
-
-DROP TABLE IF EXISTS `sys_signup`;
-CREATE TABLE `sys_signup` (
-`id`  int(11) NOT NULL AUTO_INCREMENT ,
-`signupkey`  varchar(50) NULL DEFAULT NULL ,
-`tariff_id`  varchar(30) NULL DEFAULT NULL ,
-`dialplan_id`  varchar(30) NULL DEFAULT NULL ,
-`business_holder`  enum('ADMIN','RESELLER1','RESELLER2','RESELLER3') NULL DEFAULT NULL ,
-`business_holder_account_id`  varchar(30) NULL DEFAULT NULL ,
-`default_balance`  double(16,6) NULL DEFAULT NULL ,
-`status_id`  enum('0','1') NULL DEFAULT '1' ,
-`signup_plan`  varchar(150) NULL DEFAULT NULL ,
-PRIMARY KEY (`id`)
-)ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
-
-ALTER TABLE `sys_invoice_config` ADD UNIQUE(`account_id`);
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of web_access
 -- ----------------------------
 INSERT INTO `web_access` VALUES ('1', 'admin', '123456', '1', '2019-05-03 20:30:42', '2019-06-28 04:22:00');
+INSERT INTO `web_access` VALUES ('2', 'DemoCustomer', 'Demo@Customer123', '2', null, null);
 
-
-
-
-CREATE TABLE `bundle_account` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `bundle_package_id` varchar(30) DEFAULT NULL,
-  `account_id` varchar(30) DEFAULT NULL,
-  `assign_dt` date DEFAULT NULL,
-  `account_bundle_key` varchar(30) DEFAULT NULL,
-  `bundle_package_desc` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `account_bundle_key` (`account_bundle_key`)
-) ENGINE=InnoDB AUTO_INCREMENT=1;
-
-
-
-CREATE TABLE `bundle_package` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `bundle_package_id` varchar(30) DEFAULT '',
-  `bundle_package_name` varchar(30) DEFAULT '',
-  `bundle_package_currency_id` int(11) DEFAULT 1,
-  `bundle_package_status` enum('1','0') DEFAULT '1',
-  `bundle_package_description` varchar(50) DEFAULT '',
-  `created_by` varchar(30) NOT NULL,
-  `create_dt` datetime DEFAULT NULL,
-  `update_dt` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
-  `package_option` enum('1','0') DEFAULT '0',
-  `monthly_charges` double DEFAULT 0,
-  `bundle_option` enum('1','0') DEFAULT '0',
-  `bundle1_type` enum('MINUTE','COST') DEFAULT 'MINUTE',
-  `bundle1_value` double(12,6) DEFAULT NULL,
-  `bundle2_type` enum('MINUTE','COST') DEFAULT 'MINUTE',
-  `bundle2_value` double(12,6) DEFAULT NULL,
-  `bundle3_type` enum('MINUTE','COST') DEFAULT 'MINUTE',
-  `bundle3_value` double(12,6) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `bundle_package_id` (`bundle_package_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
-
-CREATE TABLE `bundle_package_prefixes` (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
-  `bundle_package_id` varchar(30) NOT NULL,
-  `bundle_id` enum('1','2','3') NOT NULL DEFAULT '1',
-  `prefix` varchar(30) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `bundle_package_id` (`bundle_package_id`,`bundle_id`,`prefix`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 ;
-
-
-ALTER TABLE `customer_bundle_sdr` DROP INDEX `usersdr_id`;
-ALTER TABLE `customer_bundle_sdr` ADD COLUMN `account_bundle_key`  varchar(50)   DEFAULT '' AFTER `account_id`;
-ALTER TABLE `customer_bundle_sdr` ADD COLUMN `bundle_package_id`  varchar(30)   DEFAULT '' AFTER `account_bundle_key`;
-ALTER TABLE `customer_bundle_sdr` ADD COLUMN `bundle_package_name`  varchar(150)  NULL DEFAULT '' AFTER `yearmonth`;
-ALTER TABLE `customer_bundle_sdr` ADD COLUMN `total_allowed`  double(18,6)  DEFAULT 0.000000 AFTER `bundle_package_name`;
-ALTER TABLE `customer_bundle_sdr` ADD COLUMN `bundle_type`  varchar(300)   DEFAULT '' AFTER `total_allowed`;
-ALTER TABLE `customer_bundle_sdr` DROP COLUMN `service_number`;
-ALTER TABLE `customer_bundle_sdr` DROP COLUMN `service_charges`;
-ALTER TABLE `customer_bundle_sdr` DROP COLUMN `tax1`;
-ALTER TABLE `customer_bundle_sdr` DROP COLUMN `tax1_cost`;
-ALTER TABLE `customer_bundle_sdr` DROP COLUMN `tax2`;
-ALTER TABLE `customer_bundle_sdr` DROP COLUMN `tax2_cost`;
-ALTER TABLE `customer_bundle_sdr` DROP COLUMN `tax3`;
-ALTER TABLE `customer_bundle_sdr` DROP COLUMN `tax3_cost`;
-ALTER TABLE `customer_bundle_sdr` DROP COLUMN `total_tax`;
-ALTER TABLE `customer_bundle_sdr` DROP COLUMN `cost`;
-ALTER TABLE `customer_bundle_sdr` DROP COLUMN `total_cost`;
-ALTER TABLE `customer_bundle_sdr` DROP COLUMN `detail`;
-ALTER TABLE `customer_bundle_sdr` DROP COLUMN `otherdata`;
-
-CREATE INDEX `package_id` ON `customer_bundle_sdr`(`account_id`, `rule_type`, `yearmonth`, `account_bundle_key`, `bundle_package_id`) USING BTREE ;
-CREATE UNIQUE INDEX `term` ON `sys_sdr_terms`(`term`) USING BTREE ;
-
-INSERT INTO `sys_sdr_terms` (`term_group`, `term`, `display_text`, `cost_calculation_formula`) VALUES ('usage', 'BUNDLECHARGES', 'Bundle & Package Charges', '-');
-/*
-ALTER TABLE `tariff` DROP COLUMN `package_option`;
-ALTER TABLE `tariff` DROP COLUMN `monthly_charges`;
-ALTER TABLE `tariff` DROP COLUMN `bundle_option`;
-ALTER TABLE `tariff` DROP COLUMN `bundle1_type`;
-ALTER TABLE `tariff` DROP COLUMN `bundle1_value`;
-ALTER TABLE `tariff` DROP COLUMN `bundle2_type`;
-ALTER TABLE `tariff` DROP COLUMN `bundle2_value`;
-ALTER TABLE `tariff` DROP COLUMN `bundle3_type`;
-ALTER TABLE `tariff` DROP COLUMN `bundle3_value`;
-ALTER TABLE `tariff` ROW_FORMAT=Compact;
-
-DROP TABLE `tariff_bundle_prefixes`;
-*/
-
-
-ALTER TABLE `did_dst`
-MODIFY COLUMN `dst_type`  enum('IP','CUSTOMER','PSTN') DEFAULT 'IP' AFTER `account_id`,
-MODIFY COLUMN `dst_type2`  enum('IP','CUSTOMER','PSTN')  DEFAULT 'IP' AFTER `update_date`;
-
+-- ----------------------------
+-- View structure for `new_did`
+-- ----------------------------
+DROP VIEW IF EXISTS `new_did`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`127.0.0.1` SQL SECURITY DEFINER VIEW `new_did` AS select `did`.`did_id` AS `did_id`,`did`.`did_number` AS `did_number`,`did`.`did_status` AS `did_status`,`did`.`carrier_id` AS `carrier_id`,`did`.`account_id` AS `account_id`,`did`.`assign_date` AS `assign_date`,`did`.`reseller1_account_id` AS `reseller1_account_id`,`did`.`reseller1_assign_date` AS `reseller1_assign_date`,`did`.`reseller2_account_id` AS `reseller2_account_id`,`did`.`reseller2_assign_date` AS `reseller2_assign_date`,`did`.`reseller3_account_id` AS `reseller3_account_id`,`did`.`reseller3_assign_date` AS `reseller3_assign_date`,`did`.`create_date` AS `create_date`,`did`.`channels` AS `channels`,`did`.`did_name` AS `did_name`,`did`.`number_type` AS `number_type`,`usa_area_codes`.`area_code` AS `area_code`,`usa_area_codes`.`city` AS `city`,`usa_area_codes`.`state` AS `state` from (`did` join `usa_area_codes`) where ((`did`.`did_number` like concat(`usa_area_codes`.`area_code`,'%')) and (`did`.`did_status` = 'NEW')) group by `usa_area_codes`.`area_code` ;
