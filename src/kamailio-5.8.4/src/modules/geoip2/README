@@ -1,0 +1,222 @@
+geoip2 Module
+
+Sergey Okhapkin
+
+   callwithus.com
+
+Edited by
+
+Daniel-Constantin Mierla
+
+   <miconda@gmail.com>
+
+Henning Westerholt
+
+   gilawa.com
+
+   Copyright © 2010 Daniel-Constantin Mierla (asipto.com)
+     __________________________________________________________________
+
+   Table of Contents
+
+   1. Admin Guide
+
+        1. Overview
+        2. Dependencies
+
+              2.1. Kamailio Modules
+              2.2. External Libraries or Applications
+
+        3. Parameters
+
+              3.1. path (string)
+              3.2. resid (str)
+
+        4. Functions
+
+              4.1. geoip2_match(ipaddr, pvc)
+              4.2. geoip2_distance(ip_addr, latitude, longitude)
+
+        5. RPC Commands
+
+              5.1. geoip2.reload
+
+        6. Exported pseudo-variables
+
+   List of Examples
+
+   1.1. Set path parameter
+   1.2. Set resid parameter
+   1.3. geoip2_match usage
+   1.4. geoip2_distance usage
+   1.5. geoip2.reload usage
+
+Chapter 1. Admin Guide
+
+   Table of Contents
+
+   1. Overview
+   2. Dependencies
+
+        2.1. Kamailio Modules
+        2.2. External Libraries or Applications
+
+   3. Parameters
+
+        3.1. path (string)
+        3.2. resid (str)
+
+   4. Functions
+
+        4.1. geoip2_match(ipaddr, pvc)
+        4.2. geoip2_distance(ip_addr, latitude, longitude)
+
+   5. RPC Commands
+
+        5.1. geoip2.reload
+
+   6. Exported pseudo-variables
+
+1. Overview
+
+   This module allows real-time queries against the Max Mind GeoIP2
+   database to be performed from the config script.
+
+   The Max Mind GeoIP2 database is a map of IP network address assignments
+   to geographical locales that can be useful -- though approximate -- in
+   identifying the physical location with which an IP host address is
+   associated on a relatively granular level.
+
+   This database itself can be obtained on a free or commercial basis from
+   http://dev.maxmind.com/geoip/. The library libmaxminddb that interfaces
+   with the Max Mind API, as well as scripts to automate downloading of
+   the on-disk version are available at
+   http://dev.maxmind.com/geoip/geoip2/downloadable/.
+
+   This module exports a new class of pseudo-variables - $gip2(pvc=>key) -
+   to enable access to the results of a query to the database.
+
+   Many queries can be done and store results in different containers to
+   be able to use in parallel. Database is loaded at startup in cache. The
+   cache can be reloaded with an RPC command. In this case make sure that
+   you do not overwrite the file in place, but replace it, e.g. with a
+   “move” command.
+
+2. Dependencies
+
+   2.1. Kamailio Modules
+   2.2. External Libraries or Applications
+
+2.1. Kamailio Modules
+
+   The following modules must be loaded before this module:
+     * none.
+
+2.2. External Libraries or Applications
+
+   The following libraries or applications must be installed before
+   running Kamailio with this module loaded:
+     * libmaxminddb - the GeoIP2 library.
+
+3. Parameters
+
+   3.1. path (string)
+   3.2. resid (str)
+
+3.1. path (string)
+
+   Path to the GeoIP2 database file.
+
+   Default value is “null”.
+
+   Example 1.1. Set path parameter
+...
+modparam("geoip2", "path", "/usr/local/share/GeoIP/GeoLite2-City.mmdb")
+...
+
+3.2. resid (str)
+
+   Preregister result container id during initialization, enabling the use
+   of the module in KEMI scripts. In native Kamailio.cfg file,
+   registration is done when parsing config and finding variables.
+
+   Default value is “” (empty).
+
+   Example 1.2. Set resid parameter
+...
+modparam("geoip2", "resid", "src")
+...
+if(geoip2_match("$si", "src")) {
+   ...
+}
+...
+
+4. Functions
+
+   4.1. geoip2_match(ipaddr, pvc)
+   4.2. geoip2_distance(ip_addr, latitude, longitude)
+
+4.1.  geoip2_match(ipaddr, pvc)
+
+   Match ipaddr against the GeoIP database and set the pvc container. The
+   function has to be called before accessing a key via: $gip2(pvc=>key).
+   At least one function needs to be present that access the pvc
+   container, otherwise this function will not work.
+
+   Example 1.3. geoip2_match usage
+...
+if(geoip2_match("$si", "src"))
+    xlog("SIP message from: $gip2(src=>cc)\n");
+...
+
+4.2.  geoip2_distance(ip_addr, latitude, longitude)
+
+   The function calculates the distance in miles between the
+   geocoordinates of the IP address passed as parameter (the coordinates
+   are calculated inside the function) and the geocoordinates latitude and
+   longitude
+
+   Example 1.4. geoip2_distance usage
+...
+        $var(client_ip) = "109.184.18.64";
+        $var(lat_pos) = "53.200660";
+        $var(lon_pos) = "45.004640";
+        $var(dist) = geoip2_distance($var(client_ip), $var(lat_pos), $var(lon_po
+s));
+
+        xlog("distance is $var(dist)\n");
+...
+
+5. RPC Commands
+
+   5.1. geoip2.reload
+
+5.1.  geoip2.reload
+
+   Reload the internal GeoIP database. This is necessary after the
+   database file has been changed on the disk.
+
+   Example 1.5. geoip2.reload usage
+...
+kamcmd geoip2.reload
+...
+
+6. Exported pseudo-variables
+
+     * $gip2(pvc=>key) - pvc is an identifier for this query result; it is
+       designated by the second parameter of geoip2_match(). The key can
+       be one of the following:
+          + cc - country code
+          + tz - time zone
+          + zip - postal code
+          + lat - latitude
+          + lon - longitude
+          + nmask - network mask (CIDR format)
+          + city - city
+          + regc - region
+          + regn - region name
+          + metro - metro code
+          + contc - continent code
+
+   Exported pseudo-variables are documented at
+   https://www.kamailio.org/wikidocs/.

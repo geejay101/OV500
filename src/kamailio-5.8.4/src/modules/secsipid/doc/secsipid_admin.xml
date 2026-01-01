@@ -1,0 +1,540 @@
+<?xml version="1.0" encoding='ISO-8859-1'?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
+
+<!-- Include general documentation entities -->
+<!ENTITY % docentities SYSTEM "../../../../doc/docbook/entities.xml">
+%docentities;
+
+]>
+<!-- Module User's Guide -->
+
+<chapter>
+
+	<title>&adminguide;</title>
+
+	<section>
+	<title>Overview</title>
+	<para>
+		The module implements secure SIP identity specifications - STIR
+		(Secure Telephony Identity Revisited) and SHAKEN
+		(Signature-based Handling of Asserted information using toKENs)
+		IETF extensions for SIP (RFC8224, RFC8588), known together as STIR/SHAKEN.
+	</para>
+	<para>
+		It exports the functions to check and generate SIP Identity header.
+	</para>
+	<para>
+		Note that this module needs "secsipid_proc.so" module to be installed,
+		but without loading the "secsipid_proc.so" via "loadmodule". This module
+		loads "secsipid_proc.so" in child init callback in order to initialize
+		the "libsecsipid" per child process.
+	</para>
+	<para>
+		The libsecsipid is provided by secsipidx project:
+		<ulink url="https://github.com/asipto/secsipidx">https://github.com/asipto/secsipidx</ulink>.
+	</para>
+	<para>
+		In case of failure, the functions in this module return error codes
+		(the negative values) listed in the code of libsecsipid, pretty much
+		at the top of:
+		<ulink url="https://github.com/asipto/secsipidx/blob/main/secsipid/secsipid.go"
+			>https://github.com/asipto/secsipidx/blob/main/secsipid/secsipid.go</ulink>.
+	</para>
+	</section>
+	<section>
+	<title>Dependencies</title>
+	<section>
+		<title>&kamailio; Modules</title>
+		<para>
+		The following modules must be installed (but not loaded) to use this module:
+			<itemizedlist>
+			<listitem>
+			<para>
+				<emphasis>secsipid_proc</emphasis>.
+			</para>
+			</listitem>
+			</itemizedlist>
+		</para>
+	</section>
+	<section>
+		<title>External Libraries or Applications</title>
+		<para>
+		The following libraries or applications must be installed before running
+		&kamailio; with this module loaded:
+			<itemizedlist>
+			<listitem>
+			<para>
+				<emphasis>none</emphasis>.
+			</para>
+			</listitem>
+			</itemizedlist>
+		</para>
+	</section>
+	</section>
+	<section>
+	<title>Parameters</title>
+	<section>
+		<title><varname>expire</varname> (int)</title>
+		<para>
+		The interval in seconds after which the Identity header JWT is considered
+		to be expired.
+		</para>
+		<para>
+		<emphasis>
+			Default value is 300.
+		</emphasis>
+		</para>
+		<example>
+		<title>Set <varname>expire</varname> parameter</title>
+		<programlisting format="linespecific">
+...
+modparam("secsipid", "expire", 600)
+...
+</programlisting>
+		</example>
+	</section>
+	<section>
+		<title><varname>timeout</varname> (int)</title>
+		<para>
+		The interval in seconds after which the HTTP GET operation to download
+		the public key times out.
+		</para>
+		<para>
+		<emphasis>
+			Default value is 5.
+		</emphasis>
+		</para>
+		<example>
+		<title>Set <varname>timeout</varname> parameter</title>
+		<programlisting format="linespecific">
+...
+modparam("secsipid", "timeout", 2)
+...
+</programlisting>
+		</example>
+	</section>
+	<section>
+		<title><varname>cache_dir</varname> (str)</title>
+		<para>
+		The path to the directory where to save cached public keys. If set,
+		it activates the public key file caching in the libsecsipid library.
+		</para>
+		<para>
+		<emphasis>
+			Default value is "".
+		</emphasis>
+		</para>
+		<example>
+		<title>Set <varname>cache_dir</varname> parameter</title>
+		<programlisting format="linespecific">
+...
+modparam("secsipid", "cache_dir", "/tmp/kamailio/secsipid")
+...
+</programlisting>
+		</example>
+	</section>
+	<section>
+		<title><varname>cache_expire</varname> (int)</title>
+		<para>
+		The interval in seconds after which a cached public key is considered
+		expired. This value is passed to the libsecsipid library.
+		</para>
+		<para>
+		<emphasis>
+			Default value is 3600.
+		</emphasis>
+		</para>
+		<example>
+		<title>Set <varname>cache_expire</varname> parameter</title>
+		<programlisting format="linespecific">
+...
+modparam("secsipid", "cache_expire", 7200)
+...
+</programlisting>
+		</example>
+	</section>
+	<section id="secsipid.p.modproc">
+		<title><varname>modproc</varname> (str)</title>
+		<para>
+		The name of or the path to the required per-process API module.
+		</para>
+		<para>
+		<emphasis>
+			Default value is "secsipid_proc.so".
+		</emphasis>
+		</para>
+		<example>
+		<title>Set <varname>modproc</varname> parameter</title>
+		<programlisting format="linespecific">
+...
+modparam("secsipid", "modproc", "secsipid_proc2.so")
+...
+</programlisting>
+		</example>
+	</section>
+	<section id="secsipid.p.libopt">
+		<title><varname>libopt</varname> (str)</title>
+		<para>
+			Set a libsecsipid option. The value has to be name=value. The
+			parameter can be set many times.
+		</para>
+		<para>
+		<emphasis>
+			Default value is "" (not set).
+		</emphasis>
+		</para>
+		<example>
+		<title>Set <varname>libopt</varname> parameter</title>
+		<programlisting format="linespecific">
+...
+modparam("secsipid", "libopt", "CacheExpires=0")
+...
+</programlisting>
+		</example>
+	</section>
+
+	</section>
+
+	<section>
+	<title>Functions</title>
+	<section id="secsipid.f.secsipid_check_identity">
+		<title>
+		<function moreinfo="none">secsipid_check_identity(keyPath)</function>
+		</title>
+		<para>
+			Check the validity of the Identity header using the keys stored
+			in the file specified by "keyPath". If the parameter is empty,
+			the function is downloading the key using the URL from "info"
+			parameter of the Identity header, using the value of "timeout"
+			parameter to limit the download time. The validity of the JWT
+			body in the Identity header is also checked against the "expire"
+			parameter.
+		</para>
+		<para>
+		The parameters can contain pseudo-variables.
+		</para>
+		<para>
+		This function can be used from ANY_ROUTE.
+		</para>
+		<example>
+		<title><function>secsipid_check_identity</function> usage</title>
+		<programlisting format="linespecific">
+...
+request_route {
+    ...
+	if(secsipid_check_identity("/secsipid/$si/cert.pem")) { ... }
+    ...
+	if(secsipid_check_identity("")) { ... }
+    ...
+}
+...
+</programlisting>
+		</example>
+		<para>
+			Further checks can be done with config operations, decoding the JWT header
+			and payload using {s.select} and {s.decode.base64t} transformations
+			together with jansson module.
+		</para>
+	</section>
+	<section id="secsipid.f.secsipid_check_identity_pubkey">
+		<title>
+		<function moreinfo="none">secsipid_check_identity_pubkey(pubkeyVal)</function>
+		</title>
+		<para>
+			Similar to secsipid_check_identity() with the public key value
+			provided in the parameter.
+		</para>
+		<para>
+		The parameters can contain pseudo-variables.
+		</para>
+		<para>
+		This function can be used from ANY_ROUTE.
+		</para>
+		<example>
+		<title><function>secsipid_check_identity_pubkey</function> usage</title>
+		<programlisting format="linespecific">
+...
+request_route {
+  ...
+  http_client_query("https://provider.com/stir-shaken/cert.pem", "$var(pubkey)");
+  ...
+  if(secsipid_check_identity_pubkey("$var(pubkey)")) { ... }
+  ...
+}
+...
+</programlisting>
+		</example>
+	</section>
+	<section id="secsipid.f.secsipid_check">
+		<title>
+		<function moreinfo="none">secsipid_check(sIdentity, keyPath)</function>
+		</title>
+		<para>
+			Check the validity of the "sIdentity" parameter using the keys stored
+			in the file specified by "keyPath". If the keyPath parameter is empty,
+			the function is downloading the key using the URL from "info"
+			parameter of the sIdentity, using the value of "timeout"
+			parameter to limit the download time. The validity of the JWT
+			in the sIdentity value is also checked against the "expire"
+			parameter.
+		</para>
+		<para>
+		The parameters can contain pseudo-variables.
+		</para>
+		<para>
+		This function can be used from ANY_ROUTE.
+		</para>
+		<example>
+		<title><function>secsipid_check</function> usage</title>
+		<programlisting format="linespecific">
+...
+request_route {
+    ...
+	if(secsipid_check("...", "/secsipid/$si/cert.pem")) { ... }
+    ...
+	if(secsipid_check("...", "")) { ... }
+    ...
+}
+...
+</programlisting>
+		</example>
+		<para>
+			Further checks can be done with config operations, decoding the JWT header
+			and payload using {s.select} and {s.decode.base64t} transformations
+			together with jansson module.
+		</para>
+	</section>
+	<section id="secsipid.f.secsipid_get_url">
+		<title>
+		<function moreinfo="none">secsipid_get_url(url, ovar)</function>
+		</title>
+		<para>
+			Get the content of a URL and store the result in a variable.
+		</para>
+		<para>
+		The url parameters can contain pseudo-variables and ovar has to be
+		the name of a writable pseudo-variable.
+		</para>
+		<para>
+		This function can be used from ANY_ROUTE.
+		</para>
+		<example>
+		<title><function>secsipid_get_url</function> usage</title>
+		<programlisting format="linespecific">
+...
+request_route {
+  ...
+  if(secsipid_get_url("https://$fd/stirshaken/cert.pem", "$var(pubkey)")) { ... }
+  ...
+}
+...
+</programlisting>
+		</example>
+	</section>
+	<section id="secsipid.f.secsipid_add_identity">
+		<title>
+		<function moreinfo="none">secsipid_add_identity(origTN, destTN, attest, origID, x5u, keyPath)</function>
+		</title>
+		<para>
+			Add Identity header using the key specified by "keyPath" to sign the JWT body.
+			If origID is empty, a UUID string is generated to fill the field. The origTN
+			represents the origination telephone number; destTN represents the destination
+			telephone number; x5u is the HTTP URL referencing to the public key that
+			should be used to verify the signature; attest represents the attestation
+			level (should be "A", "B" or "C").
+		</para>
+		<para>
+		The parameters can contain pseudo-variables.
+		</para>
+		<para>
+		This function can be used from ANY_ROUTE.
+		</para>
+		<example>
+		<title><function>secsipid_add_identity</function> usage</title>
+		<programlisting format="linespecific">
+...
+request_route {
+    ...
+    secsipid_add_identity("$fU", "$rU", "A", "",
+        "https://kamailio.org/stir/$rd/cert.pem", "/secsipid/$rd/key.pem");
+    ...
+}
+...
+</programlisting>
+		</example>
+	</section>
+	<section id="secsipid.f.secsipid_build_identity">
+		<title>
+		<function moreinfo="none">secsipid_build_identity(origTN, destTN, attest, origID, x5u, keyPath)</function>
+		</title>
+		<para>
+			Build Identity value using the key specified by "keyPath" to sign the JWT body.
+			If origID is empty, a UUID string is generated to fill the field. The origTN
+			represents the origination telephone number; destTN represents the destination
+			telephone number; x5u is the HTTP URL referencing to the public key that
+			should be used to verify the signature; attest represents the attestation
+			level (should be "A", "B" or "C"). On success, the Indentity value is
+			stored in variable $secsipid(val). It also sets $secsipid(ret) to
+			the return value of the libsecsipid functions.
+		</para>
+		<para>
+		The parameters can contain pseudo-variables.
+		</para>
+		<para>
+		This function can be used from ANY_ROUTE.
+		</para>
+		<example>
+		<title><function>secsipid_build_identity</function> usage</title>
+		<programlisting format="linespecific">
+...
+request_route {
+    ...
+    if(secsipid_build_identity("$fU", "$rU", "A", "",
+            "https://kamailio.org/stir/$rd/cert.pem", "/secsipid/$rd/key.pem")) {
+        xinfo("Identity value: $secsipid(val)\n");
+    }
+    ...
+}
+...
+</programlisting>
+		</example>
+	</section>
+	<section id="secsipid.f.secsipid_build_identity_prvkey">
+		<title>
+		<function moreinfo="none">secsipid_build_identity_prvkey(origTN, destTN, attest, origID, x5u, keyData)</function>
+		</title>
+		<para>
+			Similar to secsipid_build_identity(), but the private key data is
+			provided as parameter instead to the file path.
+		</para>
+		<para>
+		The parameters can contain pseudo-variables.
+		</para>
+		<para>
+		This function can be used from ANY_ROUTE.
+		</para>
+		<example>
+		<title><function>secsipid_build_identity_prvkey</function> usage</title>
+		<programlisting format="linespecific">
+...
+request_route {
+    ...
+    if(secsipid_build_identity_prvkey("$fU", "$rU", "A", "",
+            "https://kamailio.org/stir/$rd/cert.pem", "$var(prvkey)")) {
+        xinfo("Identity value: $secsipid(val)\n");
+    }
+    ...
+}
+...
+</programlisting>
+		</example>
+	</section>
+	<section id="secsipid.f.secsipid_sign">
+		<title>
+		<function moreinfo="none">secsipid_sign(sheaders, spaypload, keyPath)</function>
+		</title>
+		<para>
+			Build Identity value using the key specified by "keyPath" to sign the JWT body.
+			The sheaders and spayload have to be string representation of JSON
+			headers and payload to be signed. On success, the Indentity value is
+			stored in variable $secsipid(val). It also sets $secsipid(ret) to
+			the return value of the libsecsipid functions.
+		</para>
+		<para>
+		The parameters can contain pseudo-variables.
+		</para>
+		<para>
+		This function can be used from ANY_ROUTE.
+		</para>
+		<example>
+		<title><function>secsipid_sign</function> usage</title>
+		<programlisting format="linespecific">
+...
+request_route {
+    ...
+    if(secsipid_sign("_JSON_HEADERS_", "_JSON_PAYLOAD_",
+            "/secsipid/$rd/key.pem")) {
+        xinfo("Identity value: $secsipid(val)\n");
+    }
+    ...
+}
+...
+</programlisting>
+		</example>
+	</section>
+	<section id="secsipid.f.secsipid_sign_prvkey">
+		<title>
+		<function moreinfo="none">secsipid_sign_prvkey(sheaders, spaypload, keyData)</function>
+		</title>
+		<para>
+			Build Identity value using the private key given by "keyData" to sign the JWT body.
+			The sheaders and spayload have to be string representation of JSON
+			headers and payload to be signed. On success, the Indentity value is
+			stored in variable $secsipid(val). It also sets $secsipid(ret) to
+			the return value of the libsecsipid functions.
+		</para>
+		<para>
+		The parameters can contain pseudo-variables.
+		</para>
+		<para>
+		This function can be used from ANY_ROUTE.
+		</para>
+		<example>
+		<title><function>secsipid_sign_prvkey</function> usage</title>
+		<programlisting format="linespecific">
+...
+request_route {
+    ...
+    if(secsipid_sign_prvkey("_JSON_HEADERS_", "_JSON_PAYLOAD_",
+            "_PRIVATE_KEY_")) {
+        xinfo("Identity value: $secsipid(val)\n");
+    }
+    ...
+}
+...
+</programlisting>
+		</example>
+	</section>
+	</section>
+	<section id="secsipid.s.installation">
+	<title>Installation</title>
+	<para>
+		The module needs "secsipdi_proc.so" module that depends on "libsecsipid",
+		which is a component of "sipsecidx" project from
+		https://github.com/asipto/secsipidx/. The library is
+		implemented in Go language, with generated C API and library.
+	</para>
+	<para>
+		To generate the libsecsipid files, it requires to have Go language
+		installed and its environment configured, then run the following commands:
+	</para>
+		<example>
+		<title>Libsecsipid Usage</title>
+		<programlisting format="linespecific">
+...
+export GO111MODULE=off
+go get https://github.com/asipto/secsipidx
+cd $GOPATH/src/github.com/asipto/secsipidx/csecsipid/
+make all
+make install
+
+cd /path/to/kamailio/
+make include_modules="secsipid secsipid_proc ..." cfg
+make all
+make install
+
+## or compiling individual modules for use inside source tree
+# make modules modules=src/modules/secsipid_proc
+# make modules modules=src/modules/secsipid
+...
+</programlisting>
+		</example>
+	<para>
+		For more details about compilation and installation of libsecsipid, see:
+		<ulink url="https://github.com/asipto/secsipidx">https://github.com/asipto/secsipidx</ulink>.
+	</para>
+	</section>
+
+</chapter>
+
