@@ -1,0 +1,1 @@
+V	061028191629Z		01	unknown	/C=IP/ST=SIP/O=Kamailio project/OU=Kamailio TLS Tester/CN=Kamailio/emailAddress=team@kamailio.org
