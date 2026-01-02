@@ -1,1 +1,0 @@
-period.o: period.c
